@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>กระดานร่างพร้อมท์ · เครื่องมือเขียนคำสั่ง AI สำหรับทุกสายงาน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* ===== JDKS palette · 70 กรมท่า : 20 เทา-ขาว : 10 ส้มอำพัน ===== */
+:root{
+  --navy:#2A4879;      /* แบรนด์หลัก */
+  --navy-d:#1B3054;    /* เข้ม ใช้เป็นเส้นขอบและตัวอักษร */
+  --navy-m:#3C5D93;
+  --navy-l:#7684A1;
+  --tint:#EDF1F7;      /* พื้นหลังหน้าเว็บ */
+  --tint2:#DFE6F0;
+  --grey:#E7E7E7;      /* เทาจากโลโก้ */
+  --grey2:#D7DBE2;
+  --card:#FFFFFF;
+  --card2:#F5F7FB;
+  --ink:#1B3054;--ink2:#4A5A7A;--soft:#7684A1;
+  --acc:#E08A2A;       /* สีตรงข้าม 10% */
+  --acc-l:#F5B25C;--acc-p:#FBEEDD;
+  --screen:#152744;--stxt:#E9EDF4;--shi:#F5B25C;--sdim:#7684A1;
+  --sh:4px 4px 0 var(--ink);--sh-sm:3px 3px 0 var(--ink);
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--tint);color:var(--ink);
+  background-image:radial-gradient(var(--tint2) 1.4px,transparent 1.4px);background-size:18px 18px;
+  font-family:"IBM Plex Sans Thai Looped","Noto Sans Thai",system-ui,sans-serif;
+  font-size:15px;line-height:1.72;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:"Chakra Petch","Chakra Petch Thai",sans-serif;font-weight:600;margin:0;letter-spacing:.01em}
+a{color:var(--navy)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+@media(max-width:600px){.wrap{padding:0 15px}}
+
+/* ---------- masthead ---------- */
+.masthead{background:var(--navy);color:#fff;border-bottom:3px solid var(--navy-d);position:relative;overflow:hidden}
+.masthead::before{content:"";position:absolute;inset:0;opacity:.16;pointer-events:none;
+  background-image:radial-gradient(#fff 1.3px,transparent 1.3px);background-size:16px 16px}
+.mast-top{display:flex;align-items:center;gap:24px;padding:24px 0 16px;flex-wrap:wrap;position:relative}
+.eyebrow{font-family:"Press Start 2P",monospace;font-size:9px;letter-spacing:.12em;color:var(--acc-l);margin-bottom:11px}
+.masthead h1{font-size:clamp(25px,4.2vw,35px);color:#fff;line-height:1.22;text-shadow:2px 2px 0 rgba(0,0,0,.25)}
+.masthead h1 em{font-style:normal;color:var(--acc-l)}
+.lede{margin:10px 0 0;max-width:52ch;color:#D5DEEC;font-size:14.5px}
+/* แถบจุด-ขีด ล้อลายเส้นใต้โลโก้ JDKS */
+.logobar{display:flex;align-items:center;gap:5px;margin-top:13px}
+.logobar i{width:11px;height:11px;background:var(--grey);display:block;opacity:.85}
+.logobar b{flex:1;max-width:190px;height:11px;background:var(--grey);display:block;opacity:.85}
+
+/* mascot */
+.buddy{margin-left:auto;display:flex;align-items:center;gap:12px}
+.bubble{background:#fff;color:var(--ink);border:2.5px solid var(--navy-d);border-radius:12px;
+  padding:9px 14px;font-size:12.5px;max-width:20ch;box-shadow:3px 3px 0 var(--navy-d);position:relative;line-height:1.5}
+.bubble::after{content:"";position:absolute;right:-9px;top:50%;margin-top:-6px;width:0;height:0;
+  border:6px solid transparent;border-left-color:var(--navy-d)}
+.bubble b{color:#B96A16}
+@media(max-width:860px){.bubble{display:none}}
+#pc{width:78px;height:78px;flex:none;filter:drop-shadow(3px 3px 0 rgba(0,0,0,.25))}
+#pc .eye{animation:blink 5.2s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.12)}}
+#pc .m-happy,#pc .m-idle{display:none}
+#pc.happy .m-happy{display:block}
+#pc.idle .m-idle{display:block}
+
+.dombar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:15px;position:relative}
+.dombar .lbl{font-family:"Press Start 2P",monospace;font-size:8px;color:var(--acc-l);margin-right:5px}
+.dom input{position:absolute;opacity:0;width:0;height:0}
+.dom span{display:block;cursor:pointer;font-size:13px;padding:5px 13px;border-radius:999px;
+  border:2px solid rgba(255,255,255,.5);color:#E4EAF3;transition:.14s}
+.dom span:hover{background:rgba(255,255,255,.15);border-color:#fff}
+.dom input:checked+span{background:var(--grey);border-color:var(--navy-d);color:var(--navy);font-weight:600;box-shadow:2px 2px 0 var(--navy-d)}
+.dom input:focus-visible+span{outline:2px solid var(--acc-l);outline-offset:3px}
+
+nav.tabs{display:flex;gap:8px;position:relative;transform:translateY(3px)}
+nav.tabs button{font:inherit;font-family:"Chakra Petch",sans-serif;font-size:14px;font-weight:600;cursor:pointer;
+  color:#fff;background:var(--navy-m);border:2.5px solid var(--navy-d);border-bottom:none;
+  border-radius:11px 11px 0 0;padding:9px 20px 10px}
+nav.tabs button:hover{background:#4C6FA8}
+nav.tabs button[aria-selected=true]{background:var(--tint);color:var(--navy);padding-bottom:13px;margin-bottom:-3px}
+nav.tabs button:focus-visible{outline:2px solid var(--acc);outline-offset:-5px}
+
+/* ---------- layout ---------- */
+.view[hidden]{display:none}
+.grid{display:grid;gap:26px;grid-template-columns:1.02fr 1fr;padding:28px 0 60px}
+@media(max-width:980px){.grid{grid-template-columns:1fr;padding-bottom:40px}}
+
+/* ---------- form card ---------- */
+.sheet{background:var(--card);border:3px solid var(--ink);border-radius:var(--r);box-shadow:var(--sh);position:relative;overflow:hidden}
+.sheet::before{content:"";position:absolute;left:0;top:0;bottom:0;width:9px;
+  background:linear-gradient(180deg,var(--navy) 0 62%,var(--grey) 62% 82%,var(--acc) 82% 100%);
+  border-right:3px solid var(--ink)}
+.sheet-inner{padding:24px 24px 26px 34px}
+@media(max-width:600px){.sheet-inner{padding:20px 15px 22px 22px}}
+
+fieldset{border:0;padding:0;margin:0 0 26px}
+legend{padding:0;width:100%}
+.leg{display:flex;align-items:center;gap:10px;margin-bottom:15px;width:100%}
+.leg .n{font-family:"Press Start 2P",monospace;font-size:11px;color:#fff;background:var(--navy);
+  border:2.5px solid var(--ink);border-radius:8px;padding:6px 7px 5px;box-shadow:2px 2px 0 var(--ink)}
+.leg h2{font-size:18.5px;color:var(--navy)}
+.leg .note{margin-left:auto;font-size:11.5px;color:var(--ink2);background:var(--card2);
+  border:2px solid var(--grey2);border-radius:999px;padding:2px 11px}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media(max-width:620px){.row{grid-template-columns:1fr}}
+.field{margin-bottom:13px}
+.field label,.chips-label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.opt{color:var(--soft);font-weight:400}
+input[type=text],select,textarea{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--card2);
+  border:2.5px solid var(--grey2);border-radius:10px;padding:9px 12px;transition:.14s}
+textarea{resize:vertical;min-height:78px;line-height:1.75}
+input:hover,select:hover,textarea:hover{border-color:var(--navy-l)}
+input:focus,select:focus,textarea:focus{outline:none;background:#fff;border-color:var(--navy);box-shadow:3px 3px 0 var(--acc)}
+::placeholder{color:#9BA6BC}
+
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip input{position:absolute;opacity:0;width:0;height:0}
+.chip span{display:block;cursor:pointer;font-size:13px;padding:5px 13px;border:2.5px solid var(--grey2);
+  border-radius:999px;background:var(--card2);color:var(--ink2);transition:.14s}
+.chip span:hover{border-color:var(--navy);color:var(--navy)}
+.chip input:checked+span{background:var(--navy);border-color:var(--ink);color:#fff;font-weight:600;box-shadow:2px 2px 0 var(--acc)}
+.chip input:focus-visible+span{outline:2px solid var(--acc);outline-offset:3px}
+
+.tasks{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+@media(max-width:620px){.tasks{grid-template-columns:1fr}}
+.task input{position:absolute;opacity:0;width:0;height:0}
+.task span{display:block;cursor:pointer;padding:11px 13px;background:var(--card2);height:100%;
+  border:2.5px solid var(--grey2);border-radius:12px;transition:.12s}
+.task span:hover{border-color:var(--navy);transform:translate(-1px,-1px)}
+.task strong{display:block;font-size:13.5px;font-weight:600}
+.task em{font-style:normal;font-size:11.5px;color:var(--soft);display:block;margin-top:1px}
+.task input:checked+span{background:var(--acc-p);border-color:var(--ink);box-shadow:3px 3px 0 var(--acc)}
+.task input:checked+span strong{color:#B96A16}
+.task input:focus-visible+span{outline:2px solid var(--navy);outline-offset:3px}
+#extras:empty{display:none}
+#extras{border:2.5px dashed var(--grey2);border-radius:12px;padding:14px 14px 2px;margin-top:14px;background:var(--card2)}
+
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;margin-bottom:9px;cursor:pointer}
+.check input{margin:5px 0 0;accent-color:var(--navy);flex:none;width:16px;height:16px}
+.sheet-actions{display:flex;gap:10px;flex-wrap:wrap;border-top:2.5px dashed var(--grey2);padding-top:18px}
+button{font:inherit;cursor:pointer}
+.btn-ghost{background:#fff;border:2.5px solid var(--ink);border-radius:10px;color:var(--ink);
+  padding:8px 16px;font-size:13px;font-weight:600;box-shadow:var(--sh-sm);transition:.1s}
+.btn-ghost:hover{background:var(--acc-p);border-color:var(--acc)}
+.btn-ghost:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+/* ---------- monitor ---------- */
+.board-col{position:sticky;top:20px;align-self:start}
+@media(max-width:980px){.board-col{position:static}}
+.board{background:var(--screen);border:3px solid var(--ink);border-radius:var(--r) var(--r) 6px 6px;
+  overflow:hidden;box-shadow:var(--sh);position:relative}
+.board::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.3;
+  background:repeating-linear-gradient(180deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px)}
+.board-head{display:flex;align-items:center;gap:12px;padding:11px 15px;background:var(--navy);border-bottom:2.5px solid #0E1C33}
+.board-head::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--acc);
+  box-shadow:15px 0 0 var(--grey),30px 0 0 var(--navy-l);margin-right:32px;flex:none}
+.board-head h2{color:#fff;font-size:15.5px}
+.dust{font-family:"Press Start 2P",monospace;font-size:8px;color:#A9B6CE}
+.board-head .right{margin-left:auto;display:flex;gap:8px}
+.btn-chalk{background:transparent;border:2px solid rgba(233,237,244,.55);border-radius:9px;color:#fff;
+  padding:6px 13px;font-size:12.5px;font-weight:600;transition:.12s}
+.btn-chalk:hover{background:rgba(255,255,255,.15)}
+.btn-chalk.primary{background:var(--acc);color:#3A2205;border-color:var(--navy-d);box-shadow:2px 2px 0 var(--navy-d)}
+.btn-chalk.primary:hover{background:var(--acc-l)}
+.btn-chalk:active{transform:translate(1px,1px)}
+.btn-chalk:focus-visible,.btn-ghost:focus-visible{outline:2px solid var(--acc-l);outline-offset:3px}
+.meter{height:5px;background:#0E1C33}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--navy-l),var(--acc));transition:width .3s}
+pre#out{margin:0;padding:18px 18px 22px;max-height:58vh;overflow:auto;position:relative;z-index:1;
+  font-family:"IBM Plex Sans Thai Looped","IBM Plex Mono",monospace;font-size:13.5px;line-height:1.9;
+  color:var(--stxt);white-space:pre-wrap;word-break:break-word}
+pre#out .h{color:var(--shi);font-weight:500}
+pre#out .todo{color:var(--acc-l);border-bottom:2px dotted var(--acc-l)}
+#out::-webkit-scrollbar{width:10px}
+#out::-webkit-scrollbar-thumb{background:#3A4C6E;border-radius:9px}
+.tray{background:var(--grey);border:3px solid var(--ink);border-top:none;border-radius:0 0 var(--r) var(--r);
+  padding:9px 16px;color:var(--ink);font-size:12px;box-shadow:var(--sh);margin:0 26px}
+.tray b{font-weight:700;color:#B96A16}
+.aside{margin-top:18px;background:var(--acc-p);border:3px solid var(--ink);border-radius:var(--r);padding:15px 17px;box-shadow:var(--sh)}
+.aside h3{font-size:15.5px;margin-bottom:6px;color:#8F5210}
+.aside p{margin:0;font-size:13px;color:var(--ink2)}
+.aside .go{margin-top:12px}
+
+/* ---------- guide ---------- */
+.guide{display:grid;grid-template-columns:216px 1fr;gap:38px;padding:30px 0 70px;align-items:start}
+@media(max-width:900px){.guide{grid-template-columns:1fr;gap:20px}}
+.toc{position:sticky;top:22px;background:#fff;border:3px solid var(--ink);border-radius:var(--r);padding:15px;box-shadow:var(--sh)}
+@media(max-width:900px){.toc{position:static}}
+.toc h4{font-family:"Press Start 2P",monospace;font-size:8px;color:var(--soft);margin-bottom:11px}
+.toc a{display:block;text-decoration:none;color:var(--ink2);font-size:13.5px;padding:5px 9px;border-radius:8px;transition:.12s}
+.toc a:hover{color:var(--navy);background:var(--acc-p)}
+.doc{max-width:74ch}
+.doc section{margin-bottom:40px;scroll-margin-top:20px;background:#fff;border:3px solid var(--ink);
+  border-radius:var(--r);padding:22px 24px;box-shadow:var(--sh)}
+.doc h2{font-size:23px;margin-bottom:6px;color:var(--navy)}
+.doc .kicker{font-family:"Press Start 2P",monospace;font-size:8.5px;color:#3A2205;background:var(--acc);
+  border:2.5px solid var(--ink);border-radius:7px;padding:5px 8px 4px;display:inline-block;margin-bottom:9px;box-shadow:2px 2px 0 var(--ink)}
+.doc h3{font-size:16.5px;margin:22px 0 6px;color:var(--navy)}
+.doc h3::before{content:"▸ ";color:var(--acc)}
+.doc p{margin:0 0 12px}
+.doc ul,.doc ol{margin:0 0 12px;padding-left:20px}
+.doc li{margin-bottom:6px}
+.doc li::marker{color:var(--navy);font-weight:700}
+.lead{font-size:16px;color:var(--ink2);margin-bottom:20px}
+.steps{display:grid;gap:12px;grid-template-columns:repeat(4,1fr);margin:18px 0 6px}
+@media(max-width:760px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:440px){.steps{grid-template-columns:1fr}}
+.step{background:var(--card2);border:2.5px solid var(--ink);padding:14px;border-radius:12px;box-shadow:var(--sh-sm)}
+.step .num{font-family:"Press Start 2P",monospace;font-size:12px;color:var(--acc)}
+.step h4{font-size:14.5px;margin:8px 0 3px;color:var(--navy)}
+.step p{font-size:12.5px;color:var(--ink2);margin:0}
+table.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px;margin:12px 0 16px;
+  border:2.5px solid var(--ink);border-radius:12px;overflow:hidden}
+table.tbl th,table.tbl td{text-align:left;padding:9px 12px;border-bottom:2px solid var(--tint2);vertical-align:top}
+table.tbl tr:last-child td{border-bottom:none}
+table.tbl th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px;border-bottom:2.5px solid var(--ink)}
+table.tbl td:first-child{font-weight:600;color:var(--navy)}
+table.tbl tr:nth-child(even) td{background:var(--card2)}
+.pair{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:14px 0 18px}
+@media(max-width:680px){.pair{grid-template-columns:1fr}}
+.card{border:2.5px solid var(--ink);background:var(--card2);padding:14px 15px;border-radius:12px;box-shadow:var(--sh-sm)}
+.card.bad{background:#F6F2EC;border-color:#8F5210}
+.card.good{background:#EDF1F7}
+.card .tag{font-family:"Press Start 2P",monospace;font-size:7.5px;color:var(--ink2);display:block;margin-bottom:8px}
+.card.bad .tag{color:#8F5210}
+.card.good .tag{color:var(--navy)}
+.card q{font-style:italic;display:block;font-size:13.5px;line-height:1.7}
+.card p{font-size:12.5px;color:var(--ink2);margin:9px 0 0}
+.anat{background:var(--screen);color:var(--stxt);border:2.5px solid var(--ink);border-radius:12px;padding:17px 18px;
+  font-size:13px;line-height:1.85;margin:14px 0 18px;font-family:"IBM Plex Sans Thai Looped",monospace;box-shadow:var(--sh-sm)}
+.anat .k{color:var(--shi);font-weight:500}
+.anat .c{color:#A9B6CE;font-size:12px}
+.callout{border:2.5px solid var(--ink);background:var(--acc-p);border-radius:12px;padding:13px 16px;margin:16px 0;
+  font-size:13.5px;box-shadow:var(--sh-sm)}
+.callout strong{color:#8F5210}
+details.faq{border:2.5px solid var(--grey2);border-radius:11px;margin-bottom:8px;background:var(--card2)}
+details.faq[open]{border-color:var(--ink);background:#fff}
+details.faq summary{cursor:pointer;padding:10px 14px;font-size:14.5px;font-weight:600;list-style:none;display:flex;gap:10px;align-items:baseline}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::before{content:"+";font-family:"Press Start 2P",monospace;font-size:10px;color:var(--acc);flex:none}
+details.faq[open] summary::before{content:"-"}
+details.faq .a{padding:0 14px 14px 34px;font-size:13.5px;color:var(--ink2)}
+details.faq .a p{margin:0 0 8px}
+.doc-foot{border-top:2.5px dashed var(--grey2);padding-top:18px;margin-top:16px;font-size:13px;color:var(--ink2)}
+.btn-solid{background:var(--navy);border:2.5px solid var(--ink);border-radius:10px;color:#fff;
+  padding:9px 20px;font-size:13.5px;font-weight:600;box-shadow:3px 3px 0 var(--acc)}
+.btn-solid:hover{background:var(--navy-m)}
+.btn-solid:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--acc)}
+
+/* ---------- brand footer ---------- */
+.brandbar{background:var(--navy);border-top:3px solid var(--navy-d);color:#D5DEEC;padding:18px 0;margin-top:10px}
+.brandbar .in{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brandbar .mark{font-family:"Chakra Petch",sans-serif;font-weight:700;font-size:21px;color:#fff;letter-spacing:.04em}
+.brandbar .mark .dot{color:var(--acc-l);font-weight:600}
+.brandbar .sep{width:2px;height:22px;background:rgba(255,255,255,.3)}
+.brandbar .tag{font-family:"Press Start 2P",monospace;font-size:8px;color:var(--acc-l);line-height:1.9}
+.brandbar .note{margin-left:auto;font-size:12px;color:#B9C6DA}
+@media(max-width:620px){.brandbar .note{margin-left:0;width:100%}}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);opacity:0;pointer-events:none;
+  background:#fff;color:var(--ink);border:2.5px solid var(--ink);border-radius:11px;padding:10px 20px;
+  font-size:13.5px;font-weight:600;box-shadow:3px 3px 0 var(--acc);transition:.22s;z-index:9}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+@media print{.masthead,nav.tabs,.toc,#view-build,.doc-foot,.brandbar{display:none!important}
+  body{background:#fff;font-size:12pt}.doc{max-width:none}.doc section{box-shadow:none;border-width:1px}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="mast-top">
+      <div>
+        <div class="eyebrow">เครื่องมือเขียนคำสั่งสำหรับ AI</div>
+        <h1>กระดานร่าง<em>พร้อมท์</em></h1>
+        <p class="lede">เลือกพื้นที่งานของคุณ กรอกบริบทตามช่อง แล้วระบบจะเรียบเรียงเป็นคำสั่งฉบับเต็มสำหรับส่งให้ AI ทำงานต่อ</p>
+        <div class="logobar"><i></i><i></i><i></i><i></i><i></i><b></b></div>
+      </div>
+      <div class="buddy">
+        <div class="bubble" id="bubble">สวัสดีครับ ผมชื่อ<b>บิต</b> เลือกพื้นที่งานแล้วเริ่มกรอกได้เลย</div>
+        <svg id="pc" class="idle" viewBox="0 0 64 64" aria-hidden="true">
+          <rect x="27" y="46" width="10" height="7" fill="#1B3054"/>
+          <rect x="17" y="52" width="30" height="6" rx="3" fill="#2A4879" stroke="#1B3054" stroke-width="2.5"/>
+          <rect x="5" y="7" width="54" height="41" rx="8" fill="#2A4879" stroke="#1B3054" stroke-width="3"/>
+          <rect x="11" y="13" width="42" height="27" rx="5" fill="#152744" stroke="#1B3054" stroke-width="2"/>
+          <g class="eye" style="transform-origin:22px 25px">
+            <rect x="19" y="21" width="6" height="8" rx="3" fill="#E9EDF4"/>
+          </g>
+          <g class="eye" style="transform-origin:42px 25px">
+            <rect x="39" y="21" width="6" height="8" rx="3" fill="#E9EDF4"/>
+          </g>
+          <path class="m-idle" d="M27 33 h10" stroke="#E9EDF4" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+          <path class="m-happy" d="M25 31 q7 7 14 0" stroke="#E08A2A" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <circle cx="15" cy="44" r="2" fill="#E08A2A"/>
+        </svg>
+      </div>
+    </div>
+    <div class="dombar" id="dombar"><span class="lbl">พื้นที่งาน</span></div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" id="tab-build" aria-selected="true" aria-controls="view-build">เขียนพร้อมท์</button>
+      <button role="tab" id="tab-guide" aria-selected="false" aria-controls="view-guide">คู่มือการใช้งาน</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ BUILDER ============ -->
+<div class="view" id="view-build" role="tabpanel" aria-labelledby="tab-build">
+<div class="wrap"><div class="grid">
+
+  <form class="sheet" id="form" autocomplete="off">
+    <div class="sheet-inner">
+      <fieldset>
+        <legend><div class="leg"><span class="n">๑</span><h2 id="s1title">บริบทและเป้าหมาย</h2><span class="note" id="s1note"></span></div></legend>
+        <div id="ctxFields"></div>
+        <div id="chipsBlock"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend><div class="leg"><span class="n">๒</span><h2>งานที่ให้ AI ช่วย</h2><span class="note">เลือก 1 อย่าง</span></div></legend>
+        <div class="tasks" id="tasks"></div>
+        <div id="extras"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend><div class="leg"><span class="n">๓</span><h2>เงื่อนไขของผลลัพธ์</h2><span class="note">กันงานที่ต้องแก้ซ้ำ</span></div></legend>
+        <div class="row">
+          <div class="field"><label for="format">รูปแบบที่อยากได้</label><select id="format"></select></div>
+          <div class="field"><label for="tone">น้ำเสียงและระดับภาษา</label><select id="tone"></select></div>
+        </div>
+        <div class="field"><label for="limits">ข้อจำกัดที่ต้องเคารพ <span class="opt">(เวลา งบ เครื่องมือ ข้อห้าม)</span></label>
+          <input type="text" id="limits" placeholder="ส่งภายในพรุ่งนี้เช้า ห้ามเกิน 1 หน้ากระดาษ"></div>
+        <label class="check"><input type="checkbox" id="askFirst" checked><span>ให้ AI ถามกลับก่อนถ้าข้อมูลไม่พอ แทนการเดาเอง</span></label>
+        <label class="check"><input type="checkbox" id="noInvent" checked><span>ห้ามแต่งข้อมูล ตัวเลข หรือแหล่งอ้างอิงขึ้นเอง</span></label>
+        <label class="check"><input type="checkbox" id="alt"><span>ขอทางเลือกสำรองอีก 1 แบบ ที่ใช้แนวทางต่างออกไป</span></label>
+        <label class="check"><input type="checkbox" id="why"><span>ให้อธิบายเหตุผลสั้น ๆ ท้ายงานว่าตัดสินใจแบบนั้นเพราะอะไร</span></label>
+      </fieldset>
+
+      <div class="sheet-actions">
+        <button type="button" class="btn-ghost" id="demo">กรอกตัวอย่างให้ดู</button>
+        <button type="button" class="btn-ghost" id="reset">ล้างข้อมูลทั้งหมด</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="board-col">
+    <section class="board">
+      <div class="board-head">
+        <h2>พร้อมท์ของคุณ</h2>
+        <span class="dust" id="count">0 คำ</span>
+        <div class="right">
+          <button type="button" class="btn-chalk" id="download">บันทึกไฟล์</button>
+          <button type="button" class="btn-chalk primary" id="copy">คัดลอก</button>
+        </div>
+      </div>
+      <div class="meter"><i id="bar"></i></div>
+      <pre id="out"></pre>
+    </section>
+    <div class="tray" id="foot"></div>
+    <div class="aside">
+      <h3>เลือกพื้นที่งานไม่ถูก</h3>
+      <p>ถ้างานของคุณไม่เข้าพวกไหนเลย ให้เลือก <strong>เขียนเอง</strong> ซึ่งเปิดช่องกรอกอิสระให้ระบุบทบาท ผู้รับ และผลลัพธ์ที่ต้องการด้วยตนเอง คู่มือมีวิธีเลือกและตัวอย่างครบทุกสาย</p>
+      <div class="go"><button type="button" class="btn-ghost" data-goguide>เปิดคู่มือการใช้งาน</button></div>
+    </div>
+  </div>
+
+</div></div>
+</div>
+
+<!-- ============ GUIDE ============ -->
+<div class="view" id="view-guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
+<div class="wrap"><div class="guide">
+
+  <aside class="toc">
+    <h4>สารบัญ</h4>
+    <a href="#g1">เริ่มใช้ใน 4 ขั้น</a>
+    <a href="#g2">เลือกพื้นที่งาน</a>
+    <a href="#g3">กรอกอย่างไรให้ได้ผล</a>
+    <a href="#g4">กายวิภาคของพร้อมท์</a>
+    <a href="#g5">สิ่งที่ทำให้ผลลัพธ์ต่างกัน</a>
+    <a href="#g6">หลังได้คำตอบจาก AI</a>
+    <a href="#g7">ข้อควรระวังและความรับผิดชอบ</a>
+    <a href="#g8">คำถามที่พบบ่อย</a>
+  </aside>
+
+  <article class="doc">
+
+    <section id="g1">
+      <span class="kicker">บทที่ ๑</span>
+      <h2>เริ่มใช้ใน 4 ขั้น</h2>
+      <p class="lead">เครื่องมือนี้ไม่ได้ทำงานแทนคุณ แต่ช่วยให้คุณ<strong>สั่งงาน AI ได้แม่นขึ้น</strong> คุณภาพของผลลัพธ์ขึ้นกับคุณภาพของคำสั่งเป็นหลัก</p>
+      <div class="steps">
+        <div class="step"><div class="num">๑</div><h4>เลือกพื้นที่งาน</h4><p>ชิปด้านบนสุด เปลี่ยนแล้วช่องกรอกจะเปลี่ยนตามสายงาน</p></div>
+        <div class="step"><div class="num">๒</div><h4>กรอกบริบท</h4><p>สถานการณ์จริง ผู้รับผลงาน และสิ่งที่ถือว่าสำเร็จ</p></div>
+        <div class="step"><div class="num">๓</div><h4>เลือกชนิดงาน</h4><p>เลือกทีละอย่าง ช่องกรอกเพิ่มเติมจะโผล่ตามงานที่เลือก</p></div>
+        <div class="step"><div class="num">๔</div><h4>คัดลอกไปใช้</h4><p>วางในแชท AI ที่ใช้อยู่ แล้วตรวจผลลัพธ์ทุกครั้ง</p></div>
+      </div>
+      <div class="callout"><strong>สังเกตกระดานด้านขวา</strong> ทุกครั้งที่พิมพ์ ระบบจะประกอบพร้อมท์ให้ทันที ช่องที่ยังไม่กรอกจะปรากฏเป็นข้อความสีแดงในวงเล็บสองชั้น เช่น [[ระบุผู้รับสาร]] และรางไม้ใต้กระดานจะบอกว่าเหลือกี่จุด อย่าคัดลอกไปใช้ทั้งที่ยังมีจุดค้าง เพราะ AI จะเดาแทนคุณ</div>
+    </section>
+
+    <section id="g2">
+      <span class="kicker">บทที่ ๒</span>
+      <h2>เลือกพื้นที่งาน</h2>
+      <p>แต่ละพื้นที่งานเปลี่ยนทั้งช่องกรอก ชนิดงาน และบทบาทที่ AI จะสวม เลือกให้ตรงกับงานที่ทำอยู่ ไม่จำเป็นต้องตรงกับอาชีพของคุณ เช่น ครูที่กำลังเขียนหนังสือราชการ ควรเลือกสำนักงานและเอกสาร ไม่ใช่การศึกษา</p>
+      <table class="tbl">
+        <tr><th>พื้นที่งาน</th><th>เหมาะกับใคร</th><th>ตัวอย่างงาน</th></tr>
+        <tr><td>การศึกษา</td><td>ครู อาจารย์ นักศึกษาครู ติวเตอร์</td><td>แผนการสอน ใบงาน ข้อสอบ เกณฑ์ประเมิน บันทึกหลังสอน</td></tr>
+        <tr><td>สำนักงานและเอกสาร</td><td>พนักงานออฟฟิศ ข้าราชการ ฝ่ายบุคคล ธุรการ</td><td>อีเมล บันทึกข้อความ รายงาน สรุปประชุม ข้อเสนอโครงการ คู่มือปฏิบัติงาน</td></tr>
+        <tr><td>ธุรกิจและการตลาด</td><td>เจ้าของกิจการ พ่อค้าแม่ค้าออนไลน์ นักการตลาด ฝ่ายขาย</td><td>โพสต์ขายของ คำโฆษณา แผนการตลาด วิเคราะห์ลูกค้า สคริปต์นำเสนอ</td></tr>
+        <tr><td>เทคโนโลยี</td><td>โปรแกรมเมอร์ นักศึกษาสายไอที ผู้ดูแลระบบ</td><td>เขียนโค้ด หาสาเหตุบั๊ก รีวิวโค้ด ออกแบบระบบ เอกสารเทคนิค ชุดทดสอบ</td></tr>
+        <tr><td>งานสร้างสรรค์</td><td>นักเขียน ครีเอเตอร์ คนทำคอนเทนต์</td><td>บทความ สคริปต์คลิป เรื่องเล่า ตั้งชื่อ แคปชัน โครงคอนเทนต์</td></tr>
+        <tr><td>ชีวิตประจำวัน</td><td>บุคคลทั่วไป</td><td>วางแผนทริป ข้อความที่พูดยาก สรุปเอกสารยาว แผนฝึกทักษะ เปรียบเทียบตัวเลือก วางงบใช้จ่าย</td></tr>
+        <tr><td>เขียนเอง</td><td>ทุกคนที่งานไม่เข้าพวกข้างต้น</td><td>ช่องกรอกอิสระ ระบุบทบาท ผู้รับ และผลลัพธ์เอง</td></tr>
+      </table>
+      <div class="callout">เปลี่ยนพื้นที่งานแล้ว<strong>ข้อมูลที่กรอกไว้จะถูกล้าง</strong> เพราะช่องกรอกคนละชุดกัน ถ้ายังไม่อยากเสียงานที่ร่างไว้ ให้กดบันทึกไฟล์ก่อน</div>
+    </section>
+
+    <section id="g3">
+      <span class="kicker">บทที่ ๓</span>
+      <h2>กรอกอย่างไรให้ได้ผล</h2>
+      <p>ช่องกรอกต่างกันไปตามสายงาน แต่หลักการเหมือนกันสามข้อ</p>
+
+      <h3>หนึ่ง บอกสถานการณ์จริง ไม่ใช่คำตัดสิน</h3>
+      <div class="pair">
+        <div class="card bad"><span class="tag">หลวมเกินไป</span><q>ลูกค้าไม่ค่อยสนใจสินค้า</q><p>AI ตีความได้ร้อยแบบ ผลที่ได้จึงเป็นคำแนะนำกลาง ๆ ที่หาอ่านที่ไหนก็ได้</p></div>
+        <div class="card good"><span class="tag">ใช้ได้จริง</span><q>คนเข้าดูโพสต์เฉลี่ยวันละ 300 คน แต่ทักแชทไม่ถึง 5 คน ส่วนใหญ่ถามราคาแล้วเงียบ</q><p>AI เห็นว่าปัญหาอยู่ที่การปิดการขาย ไม่ใช่การเข้าถึง จึงเสนอวิธีที่ตรงจุด</p></div>
+      </div>
+
+      <h3>สอง ระบุผู้รับผลงานให้ชัด</h3>
+      <p>งานชิ้นเดียวกันเขียนถึงหัวหน้า ถึงลูกค้า หรือถึงเพื่อนร่วมทีม ต้องใช้ภาษาและความยาวคนละแบบ ยิ่งบอกว่าผู้รับรู้เรื่องนี้มากน้อยแค่ไหนและกังวลอะไรอยู่ ผลลัพธ์จะยิ่งใช้ได้ทันที</p>
+
+      <h3>สาม บอกว่าอะไรคือความสำเร็จ</h3>
+      <p>เขียนสิ่งที่อยากให้เกิดขึ้นหลังผู้รับอ่านจบ เช่น อนุมัติงบภายในสัปดาห์นี้ หรือ ลูกค้ากดสั่งซื้อโดยไม่ต้องถามราคาซ้ำ ประโยคเดียวนี้ช่วยให้ AI ตัดสินใจแทนคุณได้ถูกทางในรายละเอียดอีกนับสิบจุด</p>
+
+      <table class="tbl">
+        <tr><th>ถ้าเว้นว่าง</th><th>สิ่งที่มักเกิดขึ้น</th></tr>
+        <tr><td>ผู้รับผลงาน</td><td>ได้ภาษากลาง ๆ ที่ต้องมานั่งปรับน้ำเสียงใหม่ทั้งฉบับ</td></tr>
+        <tr><td>ความยาวหรือขนาด</td><td>ได้งานยาวเกินความจำเป็น หรือสั้นจนใช้ไม่ได้</td></tr>
+        <tr><td>ข้อจำกัด</td><td>ได้ข้อเสนอที่ทำไม่ได้จริงเพราะเกินงบหรือเกินเวลา</td></tr>
+        <tr><td>น้ำเสียง</td><td>ได้ภาษาทางการเกินไปสำหรับแชทลูกค้า หรือกันเองเกินไปสำหรับเอกสารราชการ</td></tr>
+      </table>
+    </section>
+
+    <section id="g4">
+      <span class="kicker">บทที่ ๔</span>
+      <h2>กายวิภาคของพร้อมท์</h2>
+      <p>โครงสร้างหกส่วนนี้ใช้ได้กับงานแทบทุกชนิด ไม่ว่าจะสายไหน เป้าหมายของคู่มือคือให้คุณจำโครงนี้ได้ แล้ววันหนึ่งเขียนเองได้โดยไม่ต้องเปิดเครื่องมือ</p>
+      <div class="anat">
+<span class="k"># บทบาท</span>  <span class="c">— ให้ AI สวมหมวกใคร คำตอบเปลี่ยนทั้งหมดตามหมวก</span>
+<span class="k"># บริบท</span>  <span class="c">— สถานการณ์ของคุณ ยิ่งละเอียด ยิ่งไม่ต้องรื้อทีหลัง</span>
+<span class="k"># ภารกิจ</span>  <span class="c">— ชิ้นงานและองค์ประกอบที่ต้องมี ถ้าไม่ระบุ AI จะเลือกให้เอง</span>
+<span class="k"># รูปแบบผลลัพธ์</span>  <span class="c">— กำหนดหน้าตาไว้ก่อน ประหยัดเวลาจัดหน้า</span>
+<span class="k"># ข้อกำหนดและข้อจำกัด</span>  <span class="c">— เส้นที่ AI ไม่รู้ ถ้าคุณไม่บอก</span>
+<span class="k"># ตรวจสอบก่อนตอบ</span>  <span class="c">— ให้ AI ทวนงานตัวเอง ลดจุดที่คุณต้องตามแก้</span>
+      </div>
+      <p>ส่วนที่คนส่วนใหญ่มองข้ามคือส่วนสุดท้าย การสั่งให้ AI ตรวจงานตัวเองก่อนตอบ ช่วยจับข้อผิดพลาดพื้นฐานได้มาก เช่น งานยาวเกินที่กำหนด ตัวเลขไม่สอดคล้องกัน หรือลืมองค์ประกอบที่สั่งไว้</p>
+    </section>
+
+    <section id="g5">
+      <span class="kicker">บทที่ ๕</span>
+      <h2>สิ่งที่ทำให้ผลลัพธ์ต่างกัน</h2>
+      <ul>
+        <li><strong>ระบุจำนวนเสมอ</strong> — กี่ข้อ กี่คำ กี่นาที กี่ทางเลือก ตัวเลขทำให้ผลลัพธ์คาดเดาได้และตรวจง่าย</li>
+        <li><strong>สั่งทีละชิ้น</strong> — ขอทุกอย่างในคำสั่งเดียวมักได้ทุกอย่างแบบผิวเผิน</li>
+        <li><strong>ต่อยอดในแชทเดิม</strong> — เมื่อได้ผลลัพธ์แล้วพิมพ์ต่อได้เลย เช่น ย่อหน้าที่สองยังอ้อมไป ขอให้ตรงกว่านี้ ไม่ต้องเริ่มพร้อมท์ใหม่ทั้งหมด</li>
+        <li><strong>บอกสิ่งที่ไม่เอา</strong> — เช่น ไม่เอาศัพท์การตลาดเกินจริง หรือไม่เอาโครงสร้างแบบรายการหัวข้อ ชัดเจนกว่าปล่อยให้เดา</li>
+        <li><strong>ให้ตัวอย่างของจริง</strong> — วางงานเก่าที่คุณพอใจไว้ในแชทแล้วบอกว่าให้ยึดโทนนี้ ได้ผลกว่าบรรยายด้วยคำคุณศัพท์</li>
+      </ul>
+      <div class="pair">
+        <div class="card bad"><span class="tag">คำสั่งที่มักได้งานกลาง ๆ</span><q>ช่วยเขียนอีเมลขอเลื่อนประชุมให้หน่อย</q><p>ไม่มีผู้รับ ไม่มีเหตุผล ไม่มีน้ำเสียง ได้อีเมลแบบเทมเพลตที่ต้องแก้แทบทุกบรรทัด</p></div>
+        <div class="card good"><span class="tag">คำสั่งที่ใช้ต่อได้เลย</span><q>พร้อมท์เต็มรูปแบบจากเครื่องมือนี้ ซึ่งมีทั้งบทบาท สถานการณ์ ผู้รับ ผลลัพธ์ที่ต้องการ ข้อจำกัด และเกณฑ์ตรวจสอบ</q><p>เหลือแค่ตรวจความถูกต้องและปรับสำนวนให้เป็นของคุณ</p></div>
+      </div>
+    </section>
+
+    <section id="g6">
+      <span class="kicker">บทที่ ๖</span>
+      <h2>หลังได้คำตอบจาก AI</h2>
+      <p>ผลลัพธ์ที่ได้คือ<strong>ร่าง</strong> ไม่ใช่งานที่ส่งได้ทันที ตรวจตามลำดับนี้ก่อนทุกครั้ง</p>
+      <ol>
+        <li><strong>ความถูกต้องของข้อเท็จจริง</strong> — ตัวเลข ชื่อ วันที่ ข้อกฎหมาย และแหล่งอ้างอิง ต้องตรวจกับต้นทางจริง AI เขียนผิดได้อย่างมั่นใจ</li>
+        <li><strong>ตอบโจทย์ที่ตั้งไว้หรือไม่</strong> — ย้อนดูว่าอ่านจบแล้วผู้รับจะทำสิ่งที่คุณอยากให้ทำหรือเปล่า</li>
+        <li><strong>ความเป็นไปได้จริง</strong> — เวลา งบ กำลังคน และเครื่องมือที่ต้องใช้</li>
+        <li><strong>ความเสี่ยงเฉพาะทาง</strong> — งานที่เกี่ยวกับสุขภาพ กฎหมาย การเงิน หรือความปลอดภัย ต้องผ่านผู้เชี่ยวชาญที่รับผิดชอบได้ก่อนนำไปใช้เสมอ</li>
+        <li><strong>สำนวนที่เป็นของคุณ</strong> — ปรับคำให้เหมือนคนที่ต้องรับผิดชอบงานนี้เขียนเอง เพราะคนอ่านรู้จักคุณ ไม่ได้รู้จัก AI</li>
+      </ol>
+    </section>
+
+    <section id="g7">
+      <span class="kicker">บทที่ ๗</span>
+      <h2>ข้อควรระวังและความรับผิดชอบ</h2>
+      <ul>
+        <li><strong>อย่าใส่ข้อมูลส่วนบุคคลหรือความลับ</strong> — ชื่อจริงพร้อมข้อมูลอ่อนไหว เลขบัตรประชาชน ข้อมูลสุขภาพ รหัสผ่าน คีย์ระบบ หรือข้อมูลลูกค้า ให้เขียนแบบไม่ระบุตัวตนแทน เช่น ลูกค้ารายหนึ่งในกลุ่มองค์กร</li>
+        <li><strong>ตรวจระเบียบขององค์กร</strong> — หลายที่กำหนดว่าใช้ AI กับงานประเภทใดได้บ้าง และต้องแจ้งหรือไม่ ตรวจก่อนใช้กับงานจริง</li>
+        <li><strong>ความรับผิดชอบเป็นของคุณ</strong> — ถ้าข้อมูลในงานผิดแล้วเกิดความเสียหาย ผู้รับผิดชอบคือคนที่ส่งงาน ไม่ใช่เครื่องมือ</li>
+        <li><strong>งานเฉพาะทางต้องมีผู้เชี่ยวชาญ</strong> — เนื้อหาด้านการแพทย์ กฎหมาย ภาษี และการลงทุน ใช้ AI ร่างได้ แต่ตัดสินใจจริงต้องอาศัยผู้มีใบอนุญาตที่เห็นข้อมูลครบ</li>
+        <li><strong>ระวังอคติและบริบทที่ไม่ตรง</strong> — ตัวอย่างที่ AI ยกมามักอิงบริบทต่างประเทศ ปรับให้เข้ากับผู้รับสารไทยและท้องถิ่นของคุณเสมอ</li>
+      </ul>
+    </section>
+
+    <section id="g8">
+      <span class="kicker">บทที่ ๘</span>
+      <h2>คำถามที่พบบ่อย</h2>
+      <details class="faq"><summary>ใช้กับ AI ตัวไหนได้บ้าง</summary><div class="a"><p>ใช้ได้กับผู้ช่วย AI แบบแชททั่วไป พร้อมท์ที่สร้างเป็นข้อความล้วน ไม่ผูกกับระบบใดระบบหนึ่ง คัดลอกไปวางในช่องแชทได้เลย</p></div></details>
+      <details class="faq"><summary>ข้อมูลที่กรอกถูกส่งออกไปไหนหรือไม่</summary><div class="a"><p>ไม่ ทุกอย่างประมวลผลในหน้าเว็บนี้เท่านั้นและไม่มีการบันทึกไว้ เมื่อปิดหรือรีเฟรชหน้า ข้อมูลจะหายทั้งหมด หากต้องการเก็บให้กดบันทึกไฟล์</p></div></details>
+      <details class="faq"><summary>งานของฉันไม่เข้าพวกไหนเลย</summary><div class="a"><p>เลือกพื้นที่งาน เขียนเอง ซึ่งให้คุณระบุบทบาทของ AI ผู้รับผลงาน ข้อมูลประกอบ และผลลัพธ์ที่ถือว่าดี ด้วยคำของคุณเอง โครงสร้างหกส่วนยังทำงานเหมือนเดิม</p></div></details>
+      <details class="faq"><summary>ทำไมต้องกรอกเยอะ ในเมื่อพิมพ์สั้น ๆ AI ก็ตอบ</summary><div class="a"><p>ตอบได้ แต่จะตอบแบบกลาง ๆ ที่ใช้กับใครก็ได้ ซึ่งแปลว่าไม่ตรงกับสถานการณ์ของคุณเป็นพิเศษ เวลาที่ใช้กรอกราวสามนาที มักประหยัดเวลาแก้งานได้มากกว่านั้นหลายเท่า</p></div></details>
+      <details class="faq"><summary>ต้องการงานหลายชิ้นในเรื่องเดียวกัน</summary><div class="a"><p>ทำทีละชิ้นในแชทเดิม เริ่มจากชิ้นหลักก่อน แล้วเปลี่ยนชนิดงานและคัดลอกพร้อมท์ใหม่ไปถามต่อ AI จะเห็นสิ่งที่คุยกันไว้แล้วและทำให้สอดคล้องกัน</p></div></details>
+      <details class="faq"><summary>ผลลัพธ์ยาวหรือสั้นเกินไป</summary><div class="a"><p>พิมพ์ต่อในแชทได้เลย เช่น ย่อเหลือครึ่งเดียวโดยคงสามประเด็นหลักไว้ การปรับทีละจุดได้ผลดีกว่าสั่งให้เขียนใหม่ทั้งหมด</p></div></details>
+      <div class="doc-foot">
+        <p>พร้อมลองแล้วใช่ไหม</p>
+        <button type="button" class="btn-solid" data-gobuild>กลับไปเขียนพร้อมท์</button>
+      </div>
+    </section>
+  </article>
+</div></div>
+</div>
+
+<footer class="brandbar">
+  <div class="wrap in">
+    <span class="mark">JDKS<span class="dot">.com</span></span>
+    <span class="sep"></span>
+    <span class="tag">LIFE / STYLE / EDUCATION / COMPUTER</span>
+    <span class="note">เครื่องมือนี้ทำงานในเครื่องคุณทั้งหมด ไม่มีการส่งหรือเก็บข้อมูลที่กรอก</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s=>document.querySelector(s);
+
+/* =============== นิยามพื้นที่งาน =============== */
+const D = {
+
+/* ---------- การศึกษา ---------- */
+edu:{name:"การศึกษา",note:"ครูและนักศึกษาครู",s1:"รายวิชาและผู้เรียน",
+ ctx:[
+  {k:"subject",l:"ชื่อรายวิชา",req:1,p:"วิทยาศาสตร์พื้นฐาน",half:1},
+  {k:"level",l:"ระดับชั้น",req:1,p:"มัธยมศึกษาปีที่ 1",half:1},
+  {k:"learners",l:"จำนวนผู้เรียน",p:"35 คน",half:1},
+  {k:"time",l:"เวลาที่ใช้",req:1,p:"2 คาบ (100 นาที)",half:1},
+  {k:"unit",l:"หน่วยการเรียนรู้ / หัวข้อที่สอน",req:1,p:"หน่วยที่ 3 สารละลาย เรื่องความเข้มข้นของสารละลาย"},
+  {k:"indicators",l:"มาตรฐาน / ตัวชี้วัด",hint:"คัดลอกจากหลักสูตรมาวางได้เลย",req:1,type:"area",p:"ว 2.1 ม.1/4 ระบุปริมาณตัวละลายในสารละลาย..."},
+  {k:"context",l:"พื้นฐานและลักษณะผู้เรียน",hint:"ช่องที่ทำให้ผลลัพธ์ตรงห้องคุณที่สุด",req:1,type:"area",p:"คำนวณสัดส่วนได้ระดับพอใช้ มี 4 คนอ่านโจทย์ไม่คล่อง สมาธิอยู่ได้ราว 15 นาทีต่อกิจกรรม"}
+ ],
+ chips:{k:"bloom",l:"ระดับพฤติกรรมที่ต้องการเน้น (Bloom)",o:["จำ","เข้าใจ","ประยุกต์ใช้","วิเคราะห์","ประเมินค่า","สร้างสรรค์"],def:[1]},
+ fmt:["ตารางตามด้วยคำอธิบายใต้ตาราง","หัวข้อและหัวข้อย่อยเป็นข้อ ๆ","แบบฟอร์มแผนการสอนเต็มรูปแบบ","ข้อความล้วน คัดลอกไปพิมพ์ต่อได้"],
+ tone:["ภาษาราชการเชิงวิชาการ สำหรับส่งอาจารย์นิเทศก์","ภาษาทางการอย่างง่าย","ภาษาที่นักเรียนอ่านเองเข้าใจ"],
+ check:"เนื้อหาสอดคล้องกับหลักสูตรแกนกลางและเหมาะกับพัฒนาการของผู้เรียนหรือไม่",
+ limitsP:"ใช้วัสดุในครัวเรือน งบไม่เกิน 200 บาท ไม่ใช้สารเคมีอันตราย",
+ tasks:[
+  {id:"plan",t:"แผนการจัดการเรียนรู้",d:"ครบทุกหัวข้อตามแบบฟอร์มฝึกสอน",
+   role:"ครูผู้เชี่ยวชาญการออกแบบการจัดการเรียนรู้ตามหลักสูตรแกนกลางการศึกษาขั้นพื้นฐาน และเป็นอาจารย์นิเทศก์ที่ตรวจแผนการสอนของนักศึกษาฝึกประสบการณ์วิชาชีพครูมาแล้วหลายร้อยแผน",
+   ex:[{k:"model",l:"รูปแบบการสอน",type:"select",o:["สืบเสาะหาความรู้ 5E","การเรียนรู้เชิงรุก (Active Learning)","ใช้ปัญหาเป็นฐาน (PBL)","ใช้โครงงานเป็นฐาน","สะเต็มศึกษา (STEM)","การเรียนรู้แบบร่วมมือ","บรรยายและสาธิต","เกมและสถานการณ์จำลอง"]},
+       {k:"periods",l:"จำนวนแผน / คาบ",p:"1 แผน 2 คาบ"}],
+   m:()=>`เขียน${OR(X("periods"),"จำนวนแผน")} โดยจัดกิจกรรมตามรูปแบบ ${X("model")} ให้ครบทุกขั้นตอน และมีองค์ประกอบดังนี้
+1. สาระสำคัญ
+2. จุดประสงค์การเรียนรู้ แยกด้านความรู้ ทักษะกระบวนการ และคุณลักษณะ เขียนเป็นข้อความเชิงพฤติกรรมที่วัดได้จริง
+3. สาระการเรียนรู้
+4. กิจกรรมการเรียนรู้ตามขั้นของรูปแบบการสอน ระบุเวลาแต่ละขั้นเป็นนาที พร้อมคำถามที่ครูใช้จริงและคำตอบที่คาดหวัง
+5. สื่อและแหล่งเรียนรู้ ระบุจำนวนและวิธีเตรียม
+6. การวัดและประเมินผล ระบุสิ่งที่วัด วิธีวัด เครื่องมือ และเกณฑ์การผ่าน ให้สอดคล้องกับจุดประสงค์ทุกข้อ
+7. หัวข้อบันทึกหลังการจัดการเรียนรู้ เว้นว่างไว้ให้ครูเขียนเอง`},
+  {id:"worksheet",t:"ใบงาน / ใบกิจกรรม",d:"พร้อมเฉลยและเกณฑ์ให้คะแนน",
+   role:"ครูผู้เชี่ยวชาญการออกแบบใบงานที่นักเรียนทำตามได้ด้วยตนเอง โดยคำสั่งชัดเจนและเรียงลำดับความยากอย่างเป็นระบบ",
+   ex:[{k:"parts",l:"จำนวนตอน",p:"3 ตอน"},{k:"dotime",l:"เวลาที่ให้ทำ",p:"20 นาที"},{k:"answer",l:"แนบเฉลยและแนวการให้คะแนน",type:"check",def:1}],
+   m:()=>`ออกแบบใบงานจำนวน ${OR(X("parts"),"จำนวนตอน")} ให้นักเรียนทำเสร็จภายใน ${OR(X("dotime"),"เวลา")}
+- ขึ้นต้นด้วยหัวใบงาน ชื่อ ชั้น เลขที่ และคำชี้แจงที่นักเรียนอ่านเองแล้วเริ่มทำได้ทันที
+- เรียงจากข้อที่ทำได้เกือบทุกคน ไปสู่ข้อที่ท้าทาย
+- ทุกคำสั่งใช้ประโยคสั้นไม่เกิน 2 บรรทัด และเว้นที่ว่างสำหรับเขียนตอบให้พอเหมาะ`+(C("x_answer")?`
+- แนบเฉลยและแนวการให้คะแนนแยกไว้ท้ายใบงาน ระบุคะแนนรวมและการแบ่งคะแนนรายข้อ`:"")},
+  {id:"exam",t:"ข้อสอบ + ตารางวิเคราะห์",d:"ระบุจำนวนข้อและระดับพฤติกรรม",
+   role:"ผู้เชี่ยวชาญด้านการวัดและประเมินผลการศึกษา ที่สร้างข้อสอบให้สอดคล้องกับตัวชี้วัดและมีคุณภาพตามหลักการวัดผล",
+   ex:[{k:"items",l:"จำนวนข้อ",p:"20 ข้อ"},{k:"types",l:"รูปแบบข้อสอบ",type:"chips",o:["ปรนัย 4 ตัวเลือก","ถูก-ผิด","เติมคำ","จับคู่","อัตนัยสั้น","อัตนัยยาว"],def:[0]},{k:"table",l:"แนบตารางวิเคราะห์ข้อสอบและเฉลยพร้อมเหตุผล",type:"check",def:1}],
+   m:()=>`สร้างข้อสอบจำนวน ${OR(X("items"),"จำนวนข้อ")} รูปแบบ ${G("x_types").join(", ")||"ปรนัย 4 ตัวเลือก"}
+- ทุกข้อต้องเชื่อมกับตัวชี้วัดที่ให้ไว้
+- ตัวลวงต้องมาจากความเข้าใจคลาดเคลื่อนที่นักเรียนมักเป็นจริง ไม่ใช่ตัวเลือกที่ตัดทิ้งได้ทันที
+- ใช้สถานการณ์ใกล้ตัวผู้เรียนไทยในการตั้งโจทย์`+(C("x_table")?`
+- แนบตารางวิเคราะห์ข้อสอบ แสดงเลขข้อ ตัวชี้วัด ระดับพฤติกรรม และคะแนน พร้อมเฉลยและเหตุผลว่าทำไมตัวเลือกอื่นจึงผิด`:"")},
+  {id:"rubric",t:"เกณฑ์การประเมิน (Rubric)",d:"แยกประเด็นและระดับคุณภาพ",
+   role:"ผู้เชี่ยวชาญด้านการวัดและประเมินผล ที่ออกแบบเกณฑ์การประเมินให้ผู้ประเมินต่างคนใช้แล้วได้ผลตรงกัน",
+   ex:[{k:"target",l:"ประเมินชิ้นงานหรือพฤติกรรมใด",p:"การนำเสนอผลการทดลองหน้าชั้น"},{k:"levels",l:"จำนวนระดับคุณภาพ",type:"select",o:["4 ระดับ","3 ระดับ","5 ระดับ"]},{k:"style",l:"ชนิดเกณฑ์",type:"select",o:["แบบแยกประเด็น (Analytic)","แบบภาพรวม (Holistic)"]}],
+   m:()=>`สร้างเกณฑ์การประเมิน${X("style")} สำหรับ ${OR(X("target"),"ชิ้นงานที่ประเมิน")} จำนวน ${X("levels")}
+- แยกประเด็นการประเมินให้สอดคล้องกับตัวชี้วัด
+- คำบรรยายแต่ละระดับต้องบอกสิ่งที่สังเกตเห็นได้ ระบุปริมาณหรือความถี่ที่ตรวจนับได้ หลีกเลี่ยงคำว่าดีหรือพอใช้ลอย ๆ
+- ระบุน้ำหนักคะแนนแต่ละประเด็น คะแนนรวม และเกณฑ์ตัดสินระดับคุณภาพโดยรวม
+- เพิ่มฉบับภาษาที่นักเรียนอ่านเข้าใจ สำหรับแจกก่อนลงมือทำงาน`},
+  {id:"warmup",t:"กิจกรรมนำเข้าสู่บทเรียน",d:"หลายแบบให้เลือกใช้หน้างาน",
+   role:"ครูที่เชี่ยวชาญการสร้างความสนใจในช่วงต้นคาบ และดึงความรู้เดิมของนักเรียนออกมาก่อนเข้าสู่เนื้อหา",
+   ex:[{k:"minutes",l:"เวลาที่มี",p:"10 นาที"},{k:"count",l:"จำนวนตัวเลือก",type:"select",o:["3 กิจกรรม","5 กิจกรรม"]}],
+   m:()=>`ออกแบบกิจกรรมนำเข้าสู่บทเรียน ${X("count")} ให้เลือกใช้ กิจกรรมละไม่เกิน ${OR(X("minutes"),"เวลา")}
+แต่ละกิจกรรมให้บอก ชื่อกิจกรรม จุดมุ่งหมาย ขั้นตอนที่ครูทำเป็นข้อ ๆ คำพูดเปิดของครู สื่อที่ต้องเตรียม และวิธีเชื่อมเข้าสู่เนื้อหาหลัก
+กิจกรรมต้องดึงความรู้เดิมออกมาและเปิดเผยความเข้าใจคลาดเคลื่อนที่มีอยู่`},
+  {id:"question",t:"ชุดคำถามกระตุ้นการคิด",d:"ไล่ระดับจากง่ายไปยาก",
+   role:"ครูที่เชี่ยวชาญการตั้งคำถามเพื่อพัฒนาการคิดขั้นสูงของผู้เรียน",
+   ex:[{k:"qcount",l:"จำนวนคำถาม",p:"12 คำถาม"},{k:"use",l:"ใช้ในช่วงใด",type:"select",o:["ระหว่างจัดกิจกรรม","สรุปบทเรียน","ตรวจสอบความเข้าใจก่อนเรียน","อภิปรายกลุ่ม"]}],
+   m:()=>`สร้างชุดคำถาม ${OR(X("qcount"),"จำนวนคำถาม")} สำหรับใช้ช่วง ${X("use")}
+- จัดกลุ่มตามระดับพฤติกรรมและระบุกำกับทุกข้อ
+- ทุกคำถามแนบแนวคำตอบที่คาดหวัง และคำถามต่อยอดกรณีนักเรียนเงียบหรือตอบผิดทาง
+- เพิ่มคำถามสำรองสำหรับนักเรียนที่เรียนรู้ได้เร็วกว่าเพื่อน`},
+  {id:"media",t:"สื่อการสอน / สไลด์",d:"โครงสไลด์หรือใบความรู้",
+   role:"นักออกแบบสื่อการเรียนรู้ที่ทำเรื่องยากให้เห็นภาพและเหมาะกับช่วงวัยของผู้เรียน",
+   ex:[{k:"kind",l:"ประเภทสื่อ",type:"select",o:["โครงสไลด์นำเสนอ","ใบความรู้ 1 หน้า","สคริปต์คลิปสั้น","อินโฟกราฟิกเชิงข้อความ"]},{k:"size",l:"ความยาว",p:"12 สไลด์"}],
+   m:()=>`จัดทำ${X("kind")} ความยาว ${OR(X("size"),"ความยาว")}
+- ระบุเนื้อหาแต่ละหน้า พร้อมพาดหัวสั้น ข้อความในหน้า และคำบรรยายภาพที่ควรใช้
+- ข้อความบนสไลด์ต้องสั้นพอที่นักเรียนหลังห้องอ่านทัน รายละเอียดแยกไว้ในโน้ตของครู
+- แทรกจุดหยุดถามนักเรียนอย่างน้อย 3 จุด พร้อมคำถามที่ใช้`},
+  {id:"reflect",t:"บันทึกหลังสอน / สะท้อนคิด",d:"ต่อยอดสู่ PLC และวิจัยในชั้นเรียน",
+   role:"อาจารย์นิเทศก์ที่ช่วยนักศึกษาครูสะท้อนคิดหลังการสอนอย่างตรงไปตรงมาและสร้างสรรค์",
+   ex:[{k:"happened",l:"สิ่งที่เกิดขึ้นจริงในคาบ",type:"area",p:"นักเรียนสนใจช่วงทดลอง แต่ตอนสรุปหมดเวลา มี 6 คนทำใบงานไม่เสร็จ"},{k:"next",l:"ต่อยอดเป็นประเด็นวิจัยในชั้นเรียน",type:"check"}],
+   m:()=>`ช่วยเรียบเรียงบันทึกหลังการจัดการเรียนรู้จากสิ่งที่เกิดขึ้นจริงต่อไปนี้
+"${OR(X("happened"),"สิ่งที่เกิดขึ้นในคาบ")}"
+- สรุปผลการจัดการเรียนรู้เทียบกับจุดประสงค์ที่ตั้งไว้
+- ระบุปัญหาและอุปสรรค แยกเป็นด้านผู้เรียน ด้านกิจกรรม และด้านสื่อหรือเวลา
+- เสนอแนวทางแก้ไขที่ลงมือทำได้ในคาบถัดไปอย่างน้อย 3 ข้อ พร้อมเหตุผลเชิงหลักการเรียนรู้
+- ตั้งคำถามสะท้อนคิด 3 ข้อ ที่ท้าทายให้ครูทบทวนการตัดสินใจของตนเองระหว่างสอน`+(C("x_next")?`
+- ปิดท้ายด้วยประเด็นที่พัฒนาเป็นงานวิจัยในชั้นเรียนได้ 2 ประเด็น พร้อมคำถามวิจัยและวิธีเก็บข้อมูลที่ทำได้จริง`:"")}
+ ],
+ demo:{subject:"วิทยาศาสตร์พื้นฐาน",level:"มัธยมศึกษาปีที่ 1",learners:"36 คน",time:"2 คาบ (100 นาที)",
+  unit:"หน่วยที่ 3 สารละลาย เรื่องความเข้มข้นของสารละลายเป็นร้อยละ",
+  indicators:"ว 2.1 ม.1/4 ระบุปริมาณตัวละลายในสารละลายในหน่วยความเข้มข้นเป็นร้อยละโดยมวลต่อมวล และมวลต่อปริมาตร",
+  context:"คำนวณสัดส่วนได้ระดับพอใช้ มี 5 คนต้องการความช่วยเหลือด้านการอ่านโจทย์ ชอบลงมือทำมากกว่าฟังบรรยาย ห้องมีโปรเจกเตอร์แต่อินเทอร์เน็ตไม่เสถียร",
+  limits:"ใช้วัสดุที่หาได้ในครัวเรือน งบไม่เกิน 200 บาท ไม่ใช้สารเคมีอันตราย"}
+},
+
+/* ---------- สำนักงานและเอกสาร ---------- */
+work:{name:"สำนักงานและเอกสาร",note:"งานองค์กรและราชการ",s1:"สถานการณ์และผู้รับสาร",
+ ctx:[
+  {k:"org",l:"หน่วยงานหรือองค์กร",req:1,p:"ฝ่ายพัฒนาธุรกิจ บริษัทผลิตอาหารแปรรูป",half:1},
+  {k:"me",l:"บทบาทของคุณ",req:1,p:"หัวหน้าทีม 4 คน",half:1},
+  {k:"audience",l:"ผู้รับสาร",hint:"ตำแหน่ง ความรู้เดิม และสิ่งที่เขาสนใจ",req:1,p:"ผู้อำนวยการฝ่าย ไม่ได้ตามรายละเอียดโครงการ สนใจตัวเลขและความเสี่ยง"},
+  {k:"situation",l:"สถานการณ์และที่มา",hint:"เล่าเหมือนเล่าให้เพื่อนร่วมงานฟัง",req:1,type:"area",p:"โครงการล่าช้าจากกำหนด 3 สัปดาห์ เพราะผู้รับเหมาส่งของช้า ต้องรายงานและขอเลื่อนกำหนดส่งมอบ"},
+  {k:"goal",l:"ผลลัพธ์ที่ถือว่าสำเร็จ",hint:"อ่านจบแล้วอยากให้เขาทำอะไร",req:1,p:"อนุมัติเลื่อนกำหนดส่งมอบ 3 สัปดาห์โดยไม่ต้องเรียกประชุมเพิ่ม"},
+  {k:"facts",l:"ข้อมูลหรือตัวเลขที่ต้องใช้",type:"area",p:"งบใช้ไปแล้ว 62% กำหนดเดิม 30 ก.ย. กำหนดใหม่ 21 ต.ค."}
+ ],
+ fmt:["ข้อความพร้อมส่ง คัดลอกไปวางได้เลย","หัวข้อและหัวข้อย่อยเป็นข้อ ๆ","แบบฟอร์มหนังสือราชการ","สรุปหัวข้อสั้นตามด้วยรายละเอียด"],
+ tone:["ภาษาราชการเป็นทางการ","ภาษาทางการอย่างง่าย กระชับ","สุภาพแบบกันเองในทีม","ตรงไปตรงมาแบบผู้บริหารอ่านเร็ว"],
+ check:"น้ำเสียงเหมาะกับผู้รับสารและรักษาความสัมพันธ์ในการทำงานหรือไม่",
+ limitsP:"ไม่เกิน 1 หน้ากระดาษ ต้องส่งภายในวันนี้",
+ tasks:[
+  {id:"mail",t:"อีเมลหรือข้อความทางการ",d:"เรื่องที่ต้องเลือกคำอย่างระวัง",
+   role:"ผู้เชี่ยวชาญด้านการสื่อสารในองค์กร ที่เขียนข้อความยาก ๆ ให้ได้ผลโดยไม่ทำลายความสัมพันธ์",
+   ex:[{k:"kind",l:"ลักษณะของเรื่อง",type:"select",o:["แจ้งความคืบหน้า","ขออนุมัติหรือขอความช่วยเหลือ","แจ้งข่าวร้ายหรือความล่าช้า","ปฏิเสธหรือต่อรอง","ทวงถามอย่างสุภาพ","ขอโทษและเสนอทางแก้"]},{k:"len",l:"ความยาว",type:"select",o:["สั้นมาก ไม่เกิน 5 บรรทัด","ปานกลาง ราว 10 บรรทัด","ละเอียด พร้อมหัวข้อย่อย"]},{k:"two",l:"ขอสองสำนวนให้เลือก แบบตรงกับแบบนุ่มนวล",type:"check",def:1}],
+   m:()=>`ร่างข้อความประเภท ${X("kind")} ความยาว${X("len")}
+- ขึ้นต้นด้วยหัวเรื่องที่ผู้รับเห็นแล้วรู้ทันทีว่าต้องทำอะไร
+- ประโยคแรกบอกประเด็นหลักเลย ไม่อ้อมค้อม แล้วค่อยขยายเหตุผล
+- ปิดท้ายด้วยสิ่งที่ขอให้ผู้รับทำ พร้อมกำหนดเวลาที่ชัดเจน`+(C("x_two")?`
+- เสนอ 2 สำนวนให้เลือก แบบตรงไปตรงมาและแบบนุ่มนวลกว่า พร้อมบอกว่าแต่ละแบบเหมาะกับสถานการณ์ใด`:"")},
+  {id:"report",t:"รายงานหรือบันทึกข้อความ",d:"เอกสารที่ต้องส่งตามสายงาน",
+   role:"นักวิเคราะห์ที่เขียนรายงานให้ผู้บริหารอ่านสามสิบวินาทีแล้วตัดสินใจได้",
+   ex:[{k:"len",l:"ความยาว",p:"2 หน้า"},{k:"exec",l:"ขึ้นต้นด้วยบทสรุปผู้บริหาร",type:"check",def:1}],
+   m:()=>`เขียนรายงานความยาว ${OR(X("len"),"ความยาว")}
+${C("x_exec")?"- ขึ้นต้นด้วยบทสรุปผู้บริหารไม่เกิน 5 บรรทัด ที่อ่านแล้วตัดสินใจได้โดยไม่ต้องอ่านต่อ\n":""}- เรียงเนื้อหาเป็น สถานการณ์ปัจจุบัน สาเหตุ ผลกระทบ ทางเลือกที่มี และข้อเสนอแนะ
+- แยกข้อเท็จจริงออกจากความเห็นให้ชัด และระบุจุดที่ยังไม่มีข้อมูลยืนยันแทนการเดา
+- ปิดท้ายด้วยสิ่งที่ต้องการให้ผู้อ่านตัดสินใจ พร้อมกำหนดเวลา`},
+  {id:"minutes",t:"สรุปการประชุม",d:"เปลี่ยนโน้ตกระจัดกระจายให้เป็นเอกสาร",
+   role:"เลขานุการการประชุมมืออาชีพ ที่สรุปให้คนไม่ได้เข้าประชุมอ่านแล้วตามงานได้ถูก",
+   ex:[{k:"notes",l:"โน้ตหรือบทสนทนาที่จดไว้",type:"area",p:"วางโน้ตดิบของคุณตรงนี้ จดสั้น ๆ ไม่เป็นระเบียบก็ได้"}],
+   m:()=>`เรียบเรียงสรุปการประชุมจากโน้ตต่อไปนี้
+"${OR(X("notes"),"โน้ตการประชุม")}"
+- แยกเป็น ประเด็นที่หารือ ข้อสรุปที่ตกลงกัน และเรื่องที่ยังค้าง
+- ทำตารางสิ่งที่ต้องทำต่อ ระบุงาน ผู้รับผิดชอบ และกำหนดส่ง
+- ถ้าโน้ตไม่ระบุผู้รับผิดชอบหรือกำหนดเวลา ให้เว้นเป็นช่องว่างและทำเครื่องหมายไว้ ห้ามเดาแทน`},
+  {id:"proposal",t:"ข้อเสนอโครงการ",d:"เสนอเพื่อขออนุมัติหรือขอทรัพยากร",
+   role:"ผู้เชี่ยวชาญการเขียนข้อเสนอโครงการ ที่ทำให้ผู้อนุมัติเห็นทั้งประโยชน์และความเสี่ยงอย่างตรงไปตรงมา",
+   ex:[{k:"budget",l:"งบประมาณหรือทรัพยากรที่ขอ",p:"150,000 บาท และคนเพิ่ม 1 อัตรา"},{k:"period",l:"ระยะเวลาโครงการ",p:"6 เดือน"}],
+   m:()=>`เขียนข้อเสนอโครงการ ระยะเวลา ${OR(X("period"),"ระยะเวลา")} ขอ ${OR(X("budget"),"งบประมาณ")}
+- เริ่มจากปัญหาหรือโอกาสที่ทำให้ต้องมีโครงการนี้ พร้อมผลเสียถ้าไม่ทำ
+- ระบุวัตถุประสงค์ ขอบเขตงาน แผนดำเนินงานตามช่วงเวลา และตัวชี้วัดความสำเร็จที่วัดได้จริง
+- แจกแจงงบประมาณเป็นหมวด และระบุความเสี่ยงหลัก 3 ข้อพร้อมแผนรับมือ
+- ปิดท้ายด้วยสิ่งที่ขออนุมัติเป็นข้อ ๆ`},
+  {id:"sop",t:"คู่มือขั้นตอนปฏิบัติงาน",d:"ให้คนใหม่ทำตามได้เอง",
+   role:"ผู้เชี่ยวชาญการเขียนคู่มือปฏิบัติงาน ที่เขียนให้พนักงานใหม่วันแรกทำตามได้โดยไม่ต้องถามใคร",
+   ex:[{k:"who",l:"คนที่จะใช้คู่มือ",p:"พนักงานใหม่ที่ยังไม่เคยใช้ระบบ"}],
+   m:()=>`เขียนคู่มือขั้นตอนปฏิบัติงานสำหรับ ${OR(X("who"),"ผู้ใช้คู่มือ")}
+- เริ่มด้วยสิ่งที่ต้องเตรียมและสิทธิ์ที่ต้องมีก่อนเริ่ม
+- เขียนขั้นตอนเป็นข้อเรียงลำดับ หนึ่งข้อคือหนึ่งการกระทำ ระบุสิ่งที่ควรเห็นบนหน้าจอหรือผลลัพธ์ที่ยืนยันว่าทำถูก
+- แยกกล่องข้อควรระวังสำหรับจุดที่พลาดแล้วแก้ยาก
+- ปิดท้ายด้วยตารางปัญหาที่พบบ่อยและวิธีแก้ และช่องทางขอความช่วยเหลือ`},
+  {id:"reply",t:"ตอบข้อร้องเรียนหรือคำถามยาก",d:"เมื่อต้องตอบโดยไม่ทำสถานการณ์แย่ลง",
+   role:"ผู้เชี่ยวชาญด้านการสื่อสารในภาวะที่มีความตึงเครียด ซึ่งรักษาทั้งความถูกต้องและความรู้สึกของผู้รับ",
+   ex:[{k:"msg",l:"ข้อความที่ได้รับมา",type:"area",p:"วางข้อความต้นทางตรงนี้"},{k:"stance",l:"จุดยืนของคุณ",type:"select",o:["ยอมรับผิดและแก้ไข","ชี้แจงว่าเข้าใจคลาดเคลื่อน","ปฏิเสธคำขอแต่เสนอทางเลือก","ขอเวลาตรวจสอบก่อน"]}],
+   m:()=>`ร่างคำตอบต่อข้อความต่อไปนี้ โดยยึดจุดยืน ${X("stance")}
+"${OR(X("msg"),"ข้อความที่ได้รับ")}"
+- เริ่มด้วยการแสดงว่าเข้าใจประเด็นของผู้ส่งอย่างเฉพาะเจาะจง ไม่ใช่คำขอโทษลอย ๆ
+- ชี้แจงข้อเท็จจริงโดยไม่แก้ตัวและไม่โยนความผิด
+- เสนอสิ่งที่จะทำต่อ พร้อมกำหนดเวลาที่ชัดเจน
+- หลีกเลี่ยงประโยคที่อาจถูกตีความว่ารับผิดเกินขอบเขต หากมีจุดที่ควรปรึกษาฝ่ายกฎหมายก่อน ให้ทำเครื่องหมายไว้`}
+ ],
+ demo:{org:"ฝ่ายพัฒนาธุรกิจ บริษัทผลิตอาหารแปรรูป",me:"หัวหน้าทีม ดูแลลูกทีม 4 คน",
+  audience:"ผู้อำนวยการฝ่าย ไม่ได้ตามรายละเอียดโครงการ สนใจตัวเลขและความเสี่ยงเป็นหลัก",
+  situation:"โครงการปรับสายการผลิตล่าช้าจากกำหนด 3 สัปดาห์ เพราะผู้รับเหมาส่งอุปกรณ์ช้า ทีมแก้ปัญหาเฉพาะหน้าไปแล้วแต่ยังตามกำหนดเดิมไม่ทัน",
+  goal:"ผู้อำนวยการอนุมัติเลื่อนกำหนดส่งมอบ 3 สัปดาห์ โดยไม่ต้องเรียกประชุมเพิ่ม",
+  facts:"งบใช้ไปแล้ว 62% กำหนดเดิม 30 ก.ย. กำหนดใหม่ที่เสนอ 21 ต.ค. ค่าปรับผู้รับเหมา 45,000 บาท",
+  limits:"ไม่เกิน 1 หน้ากระดาษ ต้องส่งภายในวันนี้"}
+},
+
+/* ---------- ธุรกิจและการตลาด ---------- */
+biz:{name:"ธุรกิจและการตลาด",note:"ร้านค้าและงานขาย",s1:"สินค้าและกลุ่มลูกค้า",
+ ctx:[
+  {k:"product",l:"สินค้าหรือบริการ",req:1,p:"ร้านกาแฟคั่วเองในตัวเมือง ขายเมล็ดและเครื่องดื่ม",half:1},
+  {k:"price",l:"ระดับราคา",p:"แก้วละ 55-75 บาท",half:1},
+  {k:"target",l:"กลุ่มลูกค้า",hint:"อายุ อาชีพ และสิ่งที่เขาแคร์",req:1,p:"พนักงานออฟฟิศ 25-40 ปี ซื้อระหว่างทางไปทำงาน แคร์ความเร็วและความสม่ำเสมอของรสชาติ"},
+  {k:"edge",l:"จุดต่างจากคู่แข่ง",req:1,p:"คั่วเองทุกสัปดาห์ บอกวันคั่วบนถุง ราคาถูกกว่าเชนใหญ่ 20%"},
+  {k:"channel",l:"ช่องทางที่จะใช้",req:1,type:"select",o:["Facebook","Instagram","TikTok","LINE OA","หน้าร้าน","เว็บไซต์หรือมาร์เก็ตเพลส","อีเมล"]},
+  {k:"goal",l:"เป้าหมายของงานนี้",req:1,p:"เพิ่มยอดสั่งเมล็ดคั่วส่งประจำเดือน จาก 12 เป็น 30 ราย"},
+  {k:"problem",l:"ปัญหาที่เจออยู่",type:"area",p:"คนดูโพสต์วันละ 300 คน แต่ทักแชทไม่ถึง 5 คน ส่วนใหญ่ถามราคาแล้วเงียบ"}
+ ],
+ fmt:["ข้อความพร้อมโพสต์ คัดลอกไปวางได้เลย","หลายตัวเลือกให้เปรียบเทียบ","ตารางแผนงานตามด้วยคำอธิบาย","หัวข้อและหัวข้อย่อยเป็นข้อ ๆ"],
+ tone:["เป็นกันเองแบบคนคุยกับลูกค้าประจำ","สุภาพเป็นทางการ","สนุกและมีจังหวะ","ตรงไปตรงมา เน้นประโยชน์"],
+ check:"เนื้อหาไม่กล่าวอ้างสรรพคุณเกินจริงหรือรับประกันผลลัพธ์ที่พิสูจน์ไม่ได้ใช่หรือไม่",
+ limitsP:"ไม่ใช้คำโอ้อวดเกินจริง งบโฆษณาไม่เกิน 3,000 บาทต่อเดือน",
+ tasks:[
+  {id:"post",t:"โพสต์ขายของ",d:"ข้อความพร้อมลงช่องทางที่เลือก",
+   role:"นักเขียนคอนเทนต์การตลาดที่เข้าใจพฤติกรรมผู้ซื้อชาวไทย และเขียนให้คนหยุดอ่านโดยไม่ต้องโอ้อวด",
+   ex:[{k:"n",l:"จำนวนตัวเลือก",type:"select",o:["3 แบบ","5 แบบ"]},{k:"hook",l:"แนบพาดหัวหรือประโยคเปิดให้เลือกอีก 5 แบบ",type:"check",def:1}],
+   m:()=>`เขียนโพสต์ขาย ${X("n")} ที่ใช้มุมต่างกันคนละแบบ เช่น เล่าปัญหาลูกค้า เล่าเบื้องหลัง เปรียบเทียบ ให้ความรู้ และเสนอโปรโมชัน
+- แต่ละแบบขึ้นต้นด้วยประโยคที่คนอ่านแล้วหยุด และจบด้วยการบอกให้ทำอะไรต่ออย่างชัดเจน
+- ความยาวเหมาะกับช่องทางที่ระบุ และเขียนด้วยภาษาที่กลุ่มลูกค้ากลุ่มนี้ใช้จริง
+- ห้ามใช้คำรับประกันผลลัพธ์หรือสรรพคุณที่พิสูจน์ไม่ได้`+(C("x_hook")?`
+- แนบประโยคเปิดให้เลือกเพิ่มอีก 5 แบบ พร้อมบอกว่าแต่ละแบบเหมาะกับสถานการณ์ใด`:"")},
+  {id:"copy",t:"คำโฆษณาและหน้าขายสินค้า",d:"ข้อความบนหน้าเว็บหรือแคตตาล็อก",
+   role:"นักเขียนคำโฆษณาที่เปลี่ยนคุณสมบัติสินค้าให้เป็นประโยชน์ที่ลูกค้ารู้สึกได้",
+   ex:[{k:"where",l:"ใช้ตรงไหน",type:"select",o:["หน้าขายสินค้า","โฆษณาแบบเสียเงิน","หน้าแรกเว็บไซต์","แผ่นพับหรือป้ายหน้าร้าน"]}],
+   m:()=>`เขียนคำโฆษณาสำหรับ${X("where")}
+- เริ่มด้วยพาดหัวและพาดหัวรอง 3 ชุดให้เลือก
+- แปลงคุณสมบัติของสินค้าเป็นประโยชน์ที่ลูกค้าได้รับ โดยเขียนคู่กันให้เห็นชัด
+- ตอบข้อกังวลที่ลูกค้ามักลังเลก่อนซื้ออย่างน้อย 3 ข้อ
+- ปิดด้วยข้อความชวนให้ลงมือ 3 แบบ ที่ระดับความเร่งต่างกัน`},
+  {id:"plan",t:"แผนการตลาด",d:"วางแผนช่วงเวลาและงบ",
+   role:"ที่ปรึกษาการตลาดสำหรับธุรกิจขนาดเล็ก ที่เสนอเฉพาะสิ่งที่ทีมเล็กทำได้จริงด้วยงบจำกัด",
+   ex:[{k:"period",l:"ช่วงเวลาที่วางแผน",p:"3 เดือน"}],
+   m:()=>`วางแผนการตลาดระยะ ${OR(X("period"),"ช่วงเวลา")}
+- สรุปสถานการณ์และอุปสรรคหลักก่อน แล้วจึงเสนอแผน
+- แบ่งแผนเป็นช่วงเวลา ระบุกิจกรรม ช่องทาง งบที่ใช้ และผลที่คาดหวังของแต่ละช่วง
+- ระบุตัวชี้วัดที่วัดได้จริงด้วยเครื่องมือฟรี และบอกว่าถ้าตัวเลขไม่ถึงเป้าควรปรับอะไรก่อน
+- เรียงลำดับว่าถ้าทำได้แค่ 3 อย่าง ควรทำอะไรก่อน`},
+  {id:"persona",t:"วิเคราะห์กลุ่มลูกค้า",d:"เข้าใจคนซื้อก่อนเขียนอะไรทั้งหมด",
+   role:"นักวิจัยผู้บริโภคที่ช่วยเจ้าของธุรกิจมองเห็นลูกค้าเป็นคน ไม่ใช่ตัวเลข",
+   ex:[{k:"n",l:"จำนวนกลุ่ม",type:"select",o:["2 กลุ่ม","3 กลุ่ม"]}],
+   m:()=>`วิเคราะห์กลุ่มลูกค้าออกเป็น ${X("n")}
+- แต่ละกลุ่มบอก ลักษณะทั่วไป สถานการณ์ที่ทำให้เขานึกถึงสินค้าแบบนี้ สิ่งที่เขาลังเล และคำพูดที่เขามักใช้ตอนถาม
+- ระบุว่าแต่ละกลุ่มควรสื่อสารด้วยข้อความแบบใดและผ่านช่องทางใด
+- ปิดท้ายด้วยข้อสังเกตว่าสมมติฐานข้อใดควรทดสอบกับลูกค้าจริงก่อน เพราะการวิเคราะห์นี้อิงข้อมูลที่ให้มาเท่านั้น`},
+  {id:"pitch",t:"สคริปต์นำเสนอหรือขาย",d:"บทพูดสำหรับคุยกับลูกค้า",
+   role:"ผู้ฝึกทีมขายที่เน้นการถามและฟังมากกว่าการพูดรัว",
+   ex:[{k:"mode",l:"สถานการณ์",type:"select",o:["คุยตัวต่อตัวหน้าร้าน","โทรหาลูกค้า","นำเสนอในที่ประชุม","ตอบแชทลูกค้า"]},{k:"mins",l:"ความยาวโดยประมาณ",p:"5 นาที"}],
+   m:()=>`เขียนสคริปต์สำหรับ${X("mode")} ความยาวราว ${OR(X("mins"),"ความยาว")}
+- เริ่มด้วยประโยคเปิดและคำถามที่ทำให้ลูกค้าเล่าปัญหาของตัวเองออกมา
+- เสนอทางออกโดยเชื่อมกับสิ่งที่ลูกค้าเพิ่งพูด ไม่ใช่ท่องคุณสมบัติ
+- เตรียมคำตอบสำหรับข้อโต้แย้งที่พบบ่อย 4 ข้อ เช่น ราคาแพงไป ขอคิดดูก่อน
+- ปิดด้วยวิธีชวนตัดสินใจที่ไม่กดดัน และวิธีนัดติดตามผล`},
+  {id:"follow",t:"ข้อความติดตามลูกค้า",d:"ตามงานโดยไม่ให้รู้สึกรบกวน",
+   role:"ผู้เชี่ยวชาญการรักษาลูกค้าที่รู้ว่าจังหวะและถ้อยคำสำคัญพอ ๆ กับข้อเสนอ",
+   ex:[{k:"stage",l:"ลูกค้าอยู่ขั้นไหน",type:"select",o:["ทักมาถามแล้วเงียบ","เคยซื้อครั้งเดียวแล้วหาย","ซื้อประจำแต่ห่างไป","ยกเลิกหรือไม่พอใจ"]},{k:"n",l:"จำนวนข้อความในชุด",type:"select",o:["3 ข้อความ","5 ข้อความ"]}],
+   m:()=>`เขียนชุดข้อความติดตามลูกค้าที่${X("stage")} จำนวน ${X("n")}
+- ระบุจังหวะเวลาที่ควรส่งแต่ละข้อความ
+- แต่ละข้อความต้องให้ประโยชน์กับลูกค้าก่อนขอสิ่งใด และสั้นพอที่อ่านจบในหน้าจอเดียว
+- หลีกเลี่ยงการทวงถามซ้ำในถ้อยคำเดิม และมีทางออกให้ลูกค้าปฏิเสธได้อย่างสบายใจ`}
+ ],
+ demo:{product:"ร้านกาแฟคั่วเองในตัวเมือง ขายเมล็ดคั่วและเครื่องดื่ม",price:"เครื่องดื่มแก้วละ 55-75 บาท เมล็ด 250 กรัม 320 บาท",
+  target:"พนักงานออฟฟิศ 25-40 ปี ซื้อระหว่างทางไปทำงาน แคร์ความเร็วและความสม่ำเสมอของรสชาติ",
+  edge:"คั่วเองทุกสัปดาห์ ระบุวันคั่วบนถุง ราคาถูกกว่าเชนใหญ่ราว 20%",
+  goal:"เพิ่มยอดสั่งเมล็ดคั่วแบบส่งประจำเดือน จาก 12 รายเป็น 30 ราย ภายใน 3 เดือน",
+  problem:"คนเข้าดูโพสต์เฉลี่ยวันละ 300 คน แต่ทักแชทไม่ถึง 5 คน ส่วนใหญ่ถามราคาแล้วเงียบ",
+  limits:"ไม่ใช้คำโอ้อวดเกินจริง งบโฆษณาไม่เกิน 3,000 บาทต่อเดือน"}
+},
+
+/* ---------- เทคโนโลยี ---------- */
+tech:{name:"เทคโนโลยี",note:"งานพัฒนาและระบบ",s1:"ระบบและสภาพปัจจุบัน",
+ ctx:[
+  {k:"project",l:"ระบบหรือโปรเจกต์",req:1,p:"ระบบจองห้องประชุมภายในองค์กร ผู้ใช้ราว 200 คน"},
+  {k:"stack",l:"ภาษาและเทคโนโลยีที่ใช้",req:1,p:"Python 3.11, FastAPI, PostgreSQL, Docker",half:1},
+  {k:"who",l:"ระดับของคุณ",req:1,type:"select",o:["ผู้เริ่มต้น ขออธิบายละเอียด","ระดับกลาง ข้ามพื้นฐานได้","มีประสบการณ์ ขอสั้นและตรง"],half:1},
+  {k:"now",l:"สภาพปัจจุบันและสิ่งที่ลองแล้ว",req:1,type:"area",p:"โค้ดปัจจุบันทำงานได้แต่ช้าเมื่อข้อมูลเกินหมื่นแถว ลองเพิ่ม index แล้วดีขึ้นเล็กน้อย"},
+  {k:"goal",l:"ผลลัพธ์ที่ต้องการ",req:1,p:"หน้ารายการโหลดไม่เกิน 1 วินาทีที่ข้อมูล 100,000 แถว"},
+  {k:"code",l:"โค้ดหรือข้อความผิดพลาดที่เกี่ยวข้อง",type:"area",p:"วางโค้ดหรือ error log ตรงนี้ ลบข้อมูลลับออกก่อน"}
+ ],
+ fmt:["โค้ดพร้อมคำอธิบายใต้โค้ด","อธิบายก่อนแล้วตามด้วยโค้ด","เป็นขั้นตอนที่ทำตามได้ทีละข้อ","ตารางเปรียบเทียบตามด้วยข้อเสนอแนะ"],
+ tone:["กระชับแบบเอกสารเทคนิค","อธิบายละเอียดพร้อมเหตุผล","เหมือนเพื่อนร่วมทีมอธิบายให้ฟัง"],
+ check:"โค้ดหรือคำสั่งที่ให้ไป ทำงานได้กับเวอร์ชันและสภาพแวดล้อมที่ระบุไว้หรือไม่",
+ limitsP:"ห้ามเพิ่มไลบรารีใหม่ ต้องรองรับ Python 3.9 ขึ้นไป",
+ tasks:[
+  {id:"code",t:"เขียนโค้ดหรือฟีเจอร์",d:"งานใหม่ที่ต้องลงมือเขียน",
+   role:"วิศวกรซอฟต์แวร์อาวุโสที่เขียนโค้ดอ่านง่าย ทดสอบได้ และอธิบายเหตุผลเบื้องหลังการออกแบบเสมอ",
+   ex:[{k:"what",l:"สิ่งที่ต้องการให้ทำ",type:"area",p:"เขียนฟังก์ชันรับไฟล์ CSV แล้วตรวจความถูกต้องของคอลัมน์ก่อนบันทึกลงฐานข้อมูล"},{k:"test",l:"แนบชุดทดสอบด้วย",type:"check",def:1}],
+   m:()=>`เขียนโค้ดตามความต้องการต่อไปนี้
+"${OR(X("what"),"สิ่งที่ต้องการให้ทำ")}"
+- ใช้เฉพาะเทคโนโลยีและเวอร์ชันที่ระบุไว้ในบริบท
+- จัดการกรณีขอบและข้อผิดพลาดที่เป็นไปได้ พร้อมข้อความผิดพลาดที่บอกสาเหตุชัดเจน
+- อธิบายเหตุผลของการออกแบบส่วนสำคัญ และระบุข้อจำกัดที่ผู้ใช้ควรรู้`+(C("x_test")?`
+- แนบชุดทดสอบที่ครอบคลุมทั้งกรณีปกติและกรณีขอบ`:"")},
+  {id:"debug",t:"หาสาเหตุบั๊ก",d:"เมื่อมีอาการแต่ยังไม่รู้ต้นเหตุ",
+   role:"วิศวกรที่เก่งการไล่หาสาเหตุอย่างเป็นระบบ และไม่ด่วนสรุปก่อนมีหลักฐาน",
+   ex:[{k:"symptom",l:"อาการที่เกิดขึ้น",type:"area",p:"บันทึกข้อมูลสำเร็จบางครั้ง บางครั้งขึ้น timeout โดยไม่มีรูปแบบชัดเจน"}],
+   m:()=>`ช่วยไล่หาสาเหตุของปัญหาต่อไปนี้
+"${OR(X("symptom"),"อาการที่เกิดขึ้น")}"
+- เริ่มด้วยการตั้งสมมติฐานที่เป็นไปได้ เรียงจากน่าจะเป็นที่สุด พร้อมเหตุผล
+- สำหรับแต่ละสมมติฐาน ระบุวิธีทดสอบที่ทำได้จริงและผลที่จะยืนยันหรือตัดทิ้ง
+- อย่าเพิ่งเสนอวิธีแก้จนกว่าจะระบุขั้นตอนการยืนยันสาเหตุ แล้วจึงเสนอวิธีแก้พร้อมผลข้างเคียงที่ต้องระวัง
+- ถ้าข้อมูลที่ให้ไม่พอ ให้บอกว่าต้องการ log หรือข้อมูลอะไรเพิ่ม`},
+  {id:"review",t:"รีวิวโค้ด",d:"ตรวจก่อนส่งขึ้นระบบจริง",
+   role:"ผู้รีวิวโค้ดที่ให้ความเห็นตรงไปตรงมา แยกระดับความสำคัญ และเสนอทางแก้ทุกครั้งที่ติ",
+   ex:[{k:"focus",l:"เน้นเรื่องใดเป็นพิเศษ",type:"chips",o:["ความถูกต้อง","ความปลอดภัย","ประสิทธิภาพ","ความอ่านง่าย","การทดสอบ"],def:[0,1]}],
+   m:()=>`รีวิวโค้ดที่ให้ไว้ในบริบท โดยเน้น ${G("x_focus").join(", ")||"ความถูกต้อง"}
+- จัดกลุ่มความเห็นเป็น ต้องแก้ก่อนขึ้นระบบ ควรแก้ และข้อเสนอเพิ่มเติม
+- แต่ละข้อบอกจุดที่มีปัญหา เหตุผลว่าทำไมเป็นปัญหา และตัวอย่างการแก้
+- ระบุด้วยว่าส่วนใดเขียนได้ดีและควรคงไว้
+- ถ้าพบช่องโหว่ด้านความปลอดภัย ให้ยกขึ้นเป็นลำดับแรกเสมอ`},
+  {id:"design",t:"ออกแบบโครงสร้างระบบ",d:"ก่อนลงมือเขียนโค้ดจริง",
+   role:"สถาปนิกซอฟต์แวร์ที่เลือกทางออกที่เรียบง่ายที่สุดที่แก้ปัญหาได้ และบอกข้อแลกเปลี่ยนเสมอ",
+   ex:[{k:"scale",l:"ขนาดที่ต้องรองรับ",p:"ผู้ใช้พร้อมกัน 500 คน ข้อมูล 5 ล้านแถว"}],
+   m:()=>`เสนอแนวทางออกแบบระบบที่รองรับ ${OR(X("scale"),"ขนาดที่ต้องรองรับ")}
+- เสนอ 2 ถึง 3 แนวทาง เรียงจากเรียบง่ายที่สุด พร้อมข้อดีข้อเสียและต้นทุนการดูแลของแต่ละแนวทาง
+- ระบุโครงสร้างข้อมูลหลักและการไหลของข้อมูลระหว่างส่วนประกอบ
+- ชี้จุดที่จะกลายเป็นคอขวดก่อนเป็นอันดับแรกเมื่อระบบโต
+- ปิดท้ายด้วยข้อเสนอว่าควรเลือกแนวทางใดในสถานการณ์นี้ พร้อมเหตุผล`},
+  {id:"doc",t:"เอกสารหรือ README",d:"ให้คนอื่นเข้าใจและใช้งานต่อได้",
+   role:"นักเขียนเอกสารเทคนิคที่เขียนให้คนที่ไม่เคยเห็นโปรเจกต์นี้เริ่มใช้งานได้ภายในสิบนาที",
+   ex:[{k:"aud",l:"เขียนให้ใคร",type:"select",o:["นักพัฒนาที่เพิ่งเข้าทีม","ผู้ใช้ปลายทางที่ไม่ใช่สายเทคนิค","ทีมที่จะมาดูแลต่อ"]}],
+   m:()=>`เขียนเอกสารสำหรับ${X("aud")}
+- เริ่มด้วยว่าระบบนี้ทำอะไรและแก้ปัญหาอะไร ในสามบรรทัด
+- ระบุสิ่งที่ต้องติดตั้งก่อน และขั้นตอนเริ่มใช้งานที่คัดลอกคำสั่งไปรันได้จริง
+- อธิบายโครงสร้างโฟลเดอร์และไฟล์สำคัญ พร้อมหน้าที่ของแต่ละส่วน
+- ปิดท้ายด้วยปัญหาที่พบบ่อยและวิธีแก้ และสิ่งที่ยังทำไม่ได้ในเวอร์ชันนี้`},
+  {id:"test",t:"ชุดทดสอบ",d:"หาจุดพังก่อนผู้ใช้เจอ",
+   role:"วิศวกรทดสอบที่คิดถึงกรณีที่คนเขียนโค้ดมักลืม",
+   ex:[{k:"kind",l:"ระดับการทดสอบ",type:"select",o:["ทดสอบหน่วย (Unit)","ทดสอบการทำงานร่วมกัน (Integration)","ทดสอบจากมุมผู้ใช้ (End-to-end)"]}],
+   m:()=>`ออกแบบ${X("kind")}สำหรับโค้ดหรือฟีเจอร์ที่ระบุไว้
+- ไล่รายการกรณีทดสอบเป็นตาราง ระบุสิ่งที่ทดสอบ ข้อมูลนำเข้า และผลที่คาดหวัง
+- ครอบคลุมกรณีปกติ กรณีขอบ ข้อมูลผิดรูปแบบ และกรณีที่ระบบภายนอกล้มเหลว
+- เขียนโค้ดทดสอบจริงตามกรอบการทดสอบที่ใช้กับเทคโนโลยีในบริบท
+- ระบุกรณีที่ยังทดสอบอัตโนมัติไม่ได้และต้องตรวจด้วยมือ`}
+ ],
+ demo:{project:"ระบบจองห้องประชุมภายในองค์กร ผู้ใช้ราว 200 คน",stack:"Python 3.11, FastAPI, PostgreSQL 15, Docker",
+  who:"ระดับกลาง ข้ามพื้นฐานได้",
+  now:"หน้ารายการการจองโหลดช้ามากเมื่อข้อมูลเกินหนึ่งหมื่นแถว ลองเพิ่ม index ที่คอลัมน์วันที่แล้วดีขึ้นเล็กน้อย ยังใช้เวลาราว 4 วินาที",
+  goal:"หน้ารายการโหลดไม่เกิน 1 วินาทีที่ข้อมูล 100,000 แถว",
+  limits:"ห้ามเพิ่มไลบรารีใหม่ ต้องรองรับ Python 3.9 ขึ้นไป"}
+},
+
+/* ---------- งานสร้างสรรค์ ---------- */
+create:{name:"งานสร้างสรรค์",note:"เขียนและทำคอนเทนต์",s1:"เรื่องและผู้อ่าน",
+ ctx:[
+  {k:"topic",l:"หัวข้อหรือแก่นของเรื่อง",req:1,p:"การกลับไปทำนาที่บ้านเกิดหลังลาออกจากงานประจำ"},
+  {k:"audience",l:"ผู้อ่านหรือผู้ชม",hint:"เขาเป็นใคร รู้เรื่องนี้แค่ไหน",req:1,p:"คนทำงานในเมืองอายุ 28-40 ที่เคยคิดจะย้ายกลับบ้าน แต่ยังไม่กล้า"},
+  {k:"channel",l:"เผยแพร่ที่ไหน",req:1,type:"select",o:["บล็อกหรือเว็บไซต์","Facebook","Instagram","TikTok หรือ Reels","YouTube","จดหมายข่าว","สื่อสิ่งพิมพ์"]},
+  {k:"mood",l:"อารมณ์ที่อยากให้คนรู้สึก",req:1,p:"อบอุ่นแต่ไม่หวานเลี่ยน เห็นความจริงของงานหนักด้วย"},
+  {k:"length",l:"ความยาว",req:1,p:"800 คำ",half:1},
+  {k:"must",l:"สิ่งที่ต้องมีหรือต้องเลี่ยง",p:"ต้องพูดถึงต้นทุนจริง เลี่ยงการทำให้ดูโรแมนติกเกินไป",half:1},
+  {k:"material",l:"วัตถุดิบที่มีอยู่",hint:"เรื่องจริง ข้อมูล หรือโน้ตที่จดไว้",type:"area",p:"วางเรื่องเล่า ข้อมูล หรือประเด็นที่อยากใส่ตรงนี้"}
+ ],
+ fmt:["ข้อความพร้อมเผยแพร่","โครงเรื่องก่อนแล้วตามด้วยฉบับเต็ม","หลายตัวเลือกให้เปรียบเทียบ","แยกเป็นฉาก ๆ หรือเป็นตอน"],
+ tone:["เล่าเรื่องแบบเป็นกันเอง","จริงจังและหนักแน่น","ขี้เล่นและมีจังหวะ","เรียบง่าย ตรงไปตรงมา"],
+ check:"งานนี้ฟังดูเหมือนคนเขียนจริง ไม่ใช่ข้อความสำเร็จรูปใช่หรือไม่",
+ limitsP:"ไม่ใช้คำคมสำเร็จรูป ไม่ขึ้นต้นด้วยคำถามชวนคิด",
+ tasks:[
+  {id:"article",t:"บทความ",d:"งานเขียนขนาดยาวที่มีประเด็น",
+   role:"บรรณาธิการและนักเขียนที่ให้ความสำคัญกับความจริงของรายละเอียดมากกว่าถ้อยคำสวยหรู",
+   ex:[{k:"angle",l:"มุมที่อยากเล่า",p:"เล่าผ่านฤดูเก็บเกี่ยวแรกที่ขาดทุน"}],
+   m:()=>`เขียนบทความโดยใช้มุม ${OR(X("angle"),"มุมที่อยากเล่า")}
+- เปิดเรื่องด้วยฉากหรือรายละเอียดที่เห็นภาพ ไม่เปิดด้วยการนิยามหรือคำถามชวนคิด
+- วางประเด็นหลักให้ชัดในช่วงต้น แล้วพัฒนาไปทีละขั้นโดยมีตัวอย่างรูปธรรมรองรับ
+- ใช้ประโยคสั้นยาวสลับกัน หลีกเลี่ยงคำเชื่อมซ้ำและวลีที่พบได้ในงานเขียนทั่วไป
+- ปิดเรื่องโดยไม่สรุปซ้ำสิ่งที่พูดไปแล้ว ให้ทิ้งภาพหรือความคิดที่ค้างอยู่กับผู้อ่าน`},
+  {id:"script",t:"สคริปต์วิดีโอหรือพอดแคสต์",d:"บทสำหรับพูดหน้ากล้องหรือไมค์",
+   role:"นักเขียนบทที่เขียนให้พูดออกเสียงแล้วลื่น ไม่ใช่เขียนให้อ่านสวย",
+   ex:[{k:"mins",l:"ความยาวโดยประมาณ",p:"3 นาที"},{k:"shots",l:"แนบคำแนะนำภาพหรือมุมกล้อง",type:"check"}],
+   m:()=>`เขียนสคริปต์ความยาวราว ${OR(X("mins"),"ความยาว")}
+- สามวินาทีแรกต้องทำให้คนไม่เลื่อนผ่าน เขียนตัวเลือกเปิดมาให้ 3 แบบ
+- ใช้ภาษาพูดจริง ประโยคสั้น อ่านออกเสียงแล้วไม่สะดุด
+- แบ่งเป็นช่วง ระบุเวลาโดยประมาณของแต่ละช่วง
+- ปิดท้ายด้วยสิ่งที่อยากให้คนดูทำต่อ แบบไม่ยัดเยียด`+(C("x_shots")?`
+- แนบคำแนะนำภาพหรือมุมกล้องคู่กับบทพูดแต่ละช่วง`:"")},
+  {id:"story",t:"เรื่องเล่าหรือเรื่องแต่ง",d:"งานที่ต้องมีตัวละครและฉาก",
+   role:"นักเขียนเรื่องเล่าที่เชื่อว่ารายละเอียดเล็ก ๆ ทำให้คนเชื่อ มากกว่าการบรรยายอารมณ์ตรง ๆ",
+   ex:[{k:"pov",l:"มุมมองการเล่า",type:"select",o:["บุรุษที่หนึ่ง","บุรุษที่สาม","สลับมุมมอง"]},{k:"n",l:"จำนวนฉาก",p:"3 ฉาก"}],
+   m:()=>`เขียนเรื่องเล่าด้วยมุมมอง${X("pov")} แบ่งเป็น ${OR(X("n"),"จำนวนฉาก")}
+- แสดงอารมณ์ผ่านการกระทำและรายละเอียดรูปธรรม แทนการบอกว่าตัวละครรู้สึกอย่างไร
+- ให้บทสนทนาทำงานหลายอย่างพร้อมกัน ทั้งเผยนิสัยและขับเคลื่อนเรื่อง
+- ทุกฉากต้องมีสิ่งที่เปลี่ยนไปจากตอนเริ่มฉาก
+- หลีกเลี่ยงการปิดเรื่องด้วยบทเรียนหรือข้อคิดที่บอกตรง ๆ`},
+  {id:"name",t:"ตั้งชื่อและสโลแกน",d:"หาคำที่คนจำได้",
+   role:"นักคิดชื่อและถ้อยคำที่ให้ทั้งตัวเลือกปลอดภัยและตัวเลือกที่กล้าเสี่ยง",
+   ex:[{k:"what",l:"ตั้งชื่อให้อะไร",p:"ร้านกาแฟคั่วเอง"},{k:"n",l:"จำนวนตัวเลือก",type:"select",o:["10 ชื่อ","20 ชื่อ"]}],
+   m:()=>`คิดชื่อสำหรับ ${OR(X("what"),"สิ่งที่จะตั้งชื่อ")} จำนวน ${X("n")}
+- จัดกลุ่มตามแนวคิด เช่น ตรงไปตรงมา เล่นคำ ใช้ภาษาถิ่น หรือใช้ภาพเปรียบ
+- แต่ละชื่อบอกที่มาสั้น ๆ และเสียงที่อ่านออกมาว่าเป็นอย่างไร
+- ทำเครื่องหมายชื่อที่อาจซ้ำกับแบรนด์ที่มีอยู่แล้ว และเตือนให้ตรวจสอบเครื่องหมายการค้าก่อนใช้จริง
+- เสนอสโลแกนสั้นคู่กับชื่อที่แนะนำที่สุด 3 ชื่อ`},
+  {id:"caption",t:"แคปชันและพาดหัว",d:"ข้อความสั้นที่ต้องแม่น",
+   role:"นักเขียนพาดหัวที่รู้ว่าคำแรกสำคัญที่สุด และไม่หลอกให้คลิก",
+   ex:[{k:"n",l:"จำนวนตัวเลือก",type:"select",o:["8 แบบ","15 แบบ"]}],
+   m:()=>`เขียนแคปชันหรือพาดหัว ${X("n")} สำหรับเนื้อหาที่ระบุไว้
+- ให้หลากหลายแนว ทั้งแบบบอกประโยชน์ตรง ๆ แบบเล่าเรื่อง แบบตั้งคำถาม และแบบใช้ตัวเลข
+- ห้ามพาดหัวเกินจริงหรือสัญญาสิ่งที่เนื้อหาไม่ได้ให้
+- แต่ละแบบระบุความยาวและความเหมาะสมกับช่องทางที่เลือก
+- ทำเครื่องหมายสามแบบที่น่าจะได้ผลที่สุด พร้อมเหตุผลสั้น ๆ`},
+  {id:"outline",t:"โครงเรื่องหรือแผนคอนเทนต์",d:"วางโครงก่อนลงมือเขียน",
+   role:"บรรณาธิการที่ช่วยจัดลำดับความคิดให้กลายเป็นโครงที่เขียนต่อได้จริง",
+   ex:[{k:"span",l:"ขอบเขต",type:"select",o:["โครงของงานชิ้นเดียว","แผนคอนเทนต์ 1 เดือน","แผนคอนเทนต์ 3 เดือน"]}],
+   m:()=>`วาง${X("span")}
+- สำหรับโครงงานชิ้นเดียว ให้ระบุหัวข้อหลัก ประเด็นย่อยใต้แต่ละหัวข้อ และสิ่งที่ผู้อ่านควรได้จากแต่ละส่วน
+- สำหรับแผนคอนเทนต์ ให้ระบุหัวเรื่อง มุมที่เล่า รูปแบบ และช่วงเวลาที่ควรเผยแพร่
+- จัดลำดับให้เรื่องหนึ่งต่อยอดอีกเรื่องได้ ไม่ใช่รายการหัวข้อที่ไม่เกี่ยวกัน
+- ระบุว่าเรื่องใดต้องหาข้อมูลเพิ่มก่อนเขียน`}
+ ],
+ demo:{topic:"การกลับไปทำนาที่บ้านเกิดหลังลาออกจากงานประจำในกรุงเทพ",
+  audience:"คนทำงานในเมืองอายุ 28-40 ที่เคยคิดจะย้ายกลับบ้านแต่ยังไม่กล้าตัดสินใจ",
+  channel:"บล็อกหรือเว็บไซต์",mood:"อบอุ่นแต่ไม่หวานเลี่ยน ต้องเห็นความจริงของงานหนักด้วย",
+  length:"800 คำ",must:"ต้องพูดถึงต้นทุนจริงและรายได้ปีแรก เลี่ยงการทำให้ดูโรแมนติกเกินไป",
+  material:"ปีแรกขาดทุน 40,000 บาท ฤดูที่สองเริ่มคุ้มทุน แม่ไม่เห็นด้วยตอนแรก ตอนนี้ช่วยขายออนไลน์",
+  limits:"ไม่ใช้คำคมสำเร็จรูป ไม่ขึ้นต้นด้วยคำถามชวนคิด"}
+},
+
+/* ---------- ชีวิตประจำวัน ---------- */
+life:{name:"ชีวิตประจำวัน",note:"สำหรับบุคคลทั่วไป",s1:"สถานการณ์ของคุณ",
+ ctx:[
+  {k:"need",l:"เรื่องที่อยากให้ช่วย",req:1,p:"วางแผนเที่ยวเชียงรายกับพ่อแม่ 3 วัน"},
+  {k:"who",l:"เกี่ยวข้องกับใครบ้าง",req:1,p:"ฉัน พ่อแม่อายุ 65 และ 62 เดินไกลไม่ไหว",half:1},
+  {k:"when",l:"กรอบเวลา",req:1,p:"เสาร์-จันทร์ ต้นเดือนหน้า",half:1},
+  {k:"have",l:"สิ่งที่มีอยู่แล้ว",hint:"งบ เวลา อุปกรณ์ ทักษะ",req:1,p:"งบรวม 15,000 บาท มีรถส่วนตัว จองที่พักแล้ว 1 คืน"},
+  {k:"goal",l:"ผลลัพธ์ที่อยากได้",req:1,p:"ได้แผนที่พ่อแม่ไม่เหนื่อยเกินไป และมีเวลาพักกลางวันทุกวัน"},
+  {k:"detail",l:"รายละเอียดหรือข้อจำกัดเพิ่มเติม",type:"area",p:"พ่อมีปัญหาเข่า ขึ้นบันไดเยอะไม่ได้ แม่แพ้อาหารทะเล"}
+ ],
+ fmt:["เป็นขั้นตอนที่ทำตามได้ทีละข้อ","ตารางตามด้วยคำอธิบาย","หลายตัวเลือกให้เปรียบเทียบ","ข้อความพร้อมใช้ คัดลอกไปวางได้เลย"],
+ tone:["เป็นกันเองเหมือนเพื่อนคุยกัน","สุภาพเป็นทางการ","กระชับ ตรงประเด็น"],
+ check:"ข้อเสนออยู่ในงบและเวลาที่ระบุไว้จริงหรือไม่",
+ limitsP:"งบไม่เกินที่ระบุ ไม่ต้องเดินทางกลางคืน",
+ tasks:[
+  {id:"plan",t:"วางแผนกิจกรรม",d:"ทริป งานเลี้ยง หรือโครงการส่วนตัว",
+   role:"นักวางแผนที่คิดเผื่อสิ่งที่มักลืม และเสนอเฉพาะสิ่งที่ทำได้จริงในงบและเวลาที่มี",
+   ex:[{k:"detail",l:"ระดับความละเอียด",type:"select",o:["ภาพรวมพอเห็นทิศทาง","ละเอียดระดับรายวัน","ละเอียดระดับชั่วโมง"]}],
+   m:()=>`วางแผนให้ในระดับ${X("detail")}
+- เรียงตามลำดับเวลา ระบุสิ่งที่ต้องทำ เวลาโดยประมาณ และค่าใช้จ่ายของแต่ละส่วน
+- รวมค่าใช้จ่ายทั้งหมดแล้วเทียบกับงบที่ระบุ ถ้าเกินให้บอกว่าตัดอะไรได้ก่อน
+- เผื่อเวลาสำหรับเรื่องที่มักคาดไม่ถึง เช่น รถติดหรือคิวยาว
+- เตือนสิ่งที่ต้องจองหรือเตรียมล่วงหน้า พร้อมบอกว่าควรทำเมื่อไร
+- ข้อมูลเรื่องราคาและเวลาเปิดปิดอาจไม่เป็นปัจจุบัน ให้ทำเครื่องหมายจุดที่ควรตรวจสอบเองก่อน`},
+  {id:"message",t:"ข้อความที่พูดยาก",d:"ปฏิเสธ ต่อรอง ขอโทษ หรือขอความช่วยเหลือ",
+   role:"ผู้เชี่ยวชาญด้านการสื่อสารระหว่างบุคคล ที่ช่วยพูดสิ่งที่พูดยากโดยไม่ทำลายความสัมพันธ์",
+   ex:[{k:"kind",l:"ลักษณะข้อความ",type:"select",o:["ปฏิเสธคำขอ","ต่อรองหรือขอเงื่อนไขใหม่","ขอโทษ","ขอความช่วยเหลือ","บอกความไม่พอใจ","ตั้งขอบเขตกับคนใกล้ตัว"]},{k:"two",l:"ขอสองสำนวน แบบตรงกับแบบนุ่มนวล",type:"check",def:1}],
+   m:()=>`ช่วยร่างข้อความประเภท${X("kind")}
+- สั้นพอที่อ่านจบในครั้งเดียว และตรงประเด็นตั้งแต่ต้น
+- ไม่มีคำอธิบายยืดยาวเกินจำเป็น เพราะยิ่งอธิบายมากยิ่งดูเหมือนขอโทษที่มีจุดยืน
+- รักษาความสัมพันธ์โดยไม่กลับคำหรือทำให้ตัวเองเสียเปรียบ`+(C("x_two")?`
+- เสนอ 2 สำนวนให้เลือก แบบตรงไปตรงมาและแบบนุ่มนวลกว่า พร้อมบอกว่าเหมาะกับสถานการณ์ใด`:"")},
+  {id:"summary",t:"สรุปเอกสารยาว",d:"สัญญา คู่มือ หรือข้อความที่อ่านไม่ไหว",
+   role:"ผู้ช่วยที่อ่านเอกสารยาวแล้วดึงเฉพาะสิ่งที่ผู้อ่านต้องตัดสินใจหรือระวัง",
+   ex:[{k:"text",l:"เนื้อหาที่ต้องการให้สรุป",type:"area",p:"วางข้อความตรงนี้ ลบข้อมูลส่วนตัวและข้อมูลลับออกก่อน"},{k:"focus",l:"อยากรู้อะไรเป็นพิเศษ",p:"เงื่อนไขการยกเลิกและค่าปรับ"}],
+   m:()=>`สรุปเนื้อหาต่อไปนี้ โดยเน้น ${OR(X("focus"),"สิ่งที่อยากรู้")}
+"${OR(X("text"),"เนื้อหาที่ต้องการให้สรุป")}"
+- เริ่มด้วยสรุปสามบรรทัดว่าเอกสารนี้ว่าด้วยอะไรและมีผลอย่างไรกับผู้อ่าน
+- แจกแจงข้อที่ต้องระวังเป็นพิเศษ เช่น ภาระผูกพัน ค่าใช้จ่ายแฝง หรือเงื่อนไขที่เสียเปรียบ
+- ระบุคำถามที่ควรถามคู่สัญญาหรือผู้เกี่ยวข้องก่อนตัดสินใจ
+- สรุปเฉพาะสิ่งที่ปรากฏในเนื้อหาที่ให้มา ห้ามเติมข้อมูลจากที่อื่น และเตือนว่านี่ไม่ใช่ความเห็นทางกฎหมาย`},
+  {id:"learn",t:"แผนฝึกทักษะใหม่",d:"เรียนรู้เรื่องใหม่อย่างมีลำดับ",
+   role:"โค้ชการเรียนรู้ที่ออกแบบแผนตามเวลาจริงที่ผู้เรียนมี ไม่ใช่ตามอุดมคติ",
+   ex:[{k:"skill",l:"ทักษะที่อยากได้",p:"พูดภาษาอังกฤษในที่ประชุมได้"},{k:"hours",l:"เวลาที่ให้ได้จริงต่อสัปดาห์",p:"3 ชั่วโมง"}],
+   m:()=>`วางแผนฝึก ${OR(X("skill"),"ทักษะที่อยากได้")} โดยมีเวลา ${OR(X("hours"),"เวลาต่อสัปดาห์")}
+- แบ่งเป็นช่วง ระบุสิ่งที่ต้องทำได้เมื่อจบแต่ละช่วง เพื่อให้รู้ว่าคืบหน้าจริง
+- ระบุกิจกรรมฝึกที่ทำได้ในเวลาที่มี และวิธีวัดความก้าวหน้าด้วยตัวเอง
+- เตือนกับดักที่คนส่วนใหญ่ติดในทักษะนี้ และวิธีข้าม
+- เสนอสิ่งที่ควรทำในสัปดาห์แรกแบบเจาะจง เพื่อให้เริ่มได้ทันที`},
+  {id:"decide",t:"เปรียบเทียบก่อนตัดสินใจ",d:"เมื่อมีหลายทางเลือกและเลือกไม่ถูก",
+   role:"ที่ปรึกษาที่ช่วยจัดระเบียบความคิด โดยไม่ตัดสินใจแทนและไม่เชียร์ทางใดทางหนึ่ง",
+   ex:[{k:"options",l:"ตัวเลือกที่มี",type:"area",p:"ตัวเลือกที่ 1 ... ตัวเลือกที่ 2 ..."},{k:"care",l:"สิ่งที่คุณให้ความสำคัญที่สุด",p:"เวลาอยู่กับครอบครัว รองลงมาคือรายได้"}],
+   m:()=>`ช่วยเปรียบเทียบตัวเลือกต่อไปนี้
+"${OR(X("options"),"ตัวเลือกที่มี")}"
+โดยให้น้ำหนักกับ ${OR(X("care"),"สิ่งที่ให้ความสำคัญ")}
+- ทำตารางเทียบตัวเลือกตามเกณฑ์ที่สำคัญกับสถานการณ์นี้
+- ระบุข้อแลกเปลี่ยนที่แท้จริงของแต่ละทาง และสิ่งที่ต้องยอมเสียถ้าเลือกทางนั้น
+- ชี้ข้อมูลที่ยังขาดและควรหาก่อนตัดสินใจ
+- อย่าสรุปแทนว่าควรเลือกอะไร แต่ให้ตั้งคำถาม 3 ข้อที่ช่วยให้ตัดสินใจได้ด้วยตัวเอง`},
+  {id:"budget",t:"วางงบและตารางชีวิต",d:"จัดการเงินหรือเวลาในแต่ละเดือน",
+   role:"ผู้ช่วยวางแผนที่ทำเรื่องตัวเลขให้เห็นภาพและทำตามได้จริง",
+   ex:[{k:"kind",l:"ต้องการวางแผนเรื่องใด",type:"select",o:["งบใช้จ่ายรายเดือน","การเก็บเงินเพื่อเป้าหมาย","ตารางเวลาประจำสัปดาห์","แผนลดรายจ่าย"]},{k:"numbers",l:"ตัวเลขที่มี",type:"area",p:"รายได้ 28,000 ค่าเช่า 6,000 ค่ากิน 7,000 ผ่อนรถ 5,500"}],
+   m:()=>`ช่วยวางแผนเรื่อง${X("kind")} จากข้อมูลต่อไปนี้
+"${OR(X("numbers"),"ตัวเลขที่มี")}"
+- แจกแจงเป็นตารางให้เห็นภาพรวมก่อน แล้วชี้จุดที่ผิดสัดส่วนมากที่สุด
+- เสนอการปรับที่ทำได้จริง 3 ถึง 5 ข้อ เรียงจากข้อที่กระทบชีวิตประจำวันน้อยที่สุด
+- คำนวณผลของการปรับให้เห็นเป็นตัวเลขต่อเดือนและต่อปี
+- เนื้อหานี้เป็นการจัดระเบียบข้อมูลเท่านั้น ไม่ใช่คำแนะนำการลงทุนหรือคำแนะนำทางการเงินเฉพาะบุคคล`}
+ ],
+ demo:{need:"วางแผนเที่ยวเชียงรายกับพ่อแม่ 3 วัน 2 คืน",who:"ฉัน พ่ออายุ 65 แม่อายุ 62 เดินไกลไม่ค่อยไหว",
+  when:"เสาร์ถึงจันทร์ ต้นเดือนหน้า",have:"งบรวม 15,000 บาท มีรถส่วนตัว จองที่พักแล้ว 1 คืน",
+  goal:"ได้แผนที่พ่อแม่ไม่เหนื่อยเกินไป มีเวลาพักกลางวันทุกวัน และไม่เกินงบ",
+  detail:"พ่อมีปัญหาเข่า ขึ้นบันไดเยอะไม่ได้ แม่แพ้อาหารทะเล อยากได้ที่ถ่ายรูปสวยอย่างน้อยวันละแห่ง",
+  limits:"ไม่ขับรถกลางคืน ไม่เดินเกินครั้งละ 20 นาที"}
+},
+
+/* ---------- เขียนเอง ---------- */
+free:{name:"เขียนเอง",note:"งานที่ไม่เข้าพวกไหน",s1:"กำหนดเองทุกอย่าง",
+ ctx:[
+  {k:"role",l:"อยากให้ AI สวมบทบาทเป็นใคร",hint:"ยิ่งเจาะจง ยิ่งได้คำตอบเฉพาะทาง",req:1,p:"นักโภชนาการที่ทำงานกับผู้สูงอายุในชุมชนมา 10 ปี"},
+  {k:"situation",l:"สถานการณ์และที่มา",req:1,type:"area",p:"เล่าเรื่องของคุณเหมือนเล่าให้คนที่ไม่รู้เรื่องมาก่อนฟัง"},
+  {k:"audience",l:"ใครคือผู้รับผลงาน",req:1,p:"คณะกรรมการชุมชน ส่วนใหญ่อายุ 50 ขึ้นไป ไม่คุ้นศัพท์วิชาการ"},
+  {k:"goal",l:"ผลลัพธ์ที่ถือว่าสำเร็จ",req:1,p:"คณะกรรมการเห็นชอบให้เริ่มโครงการภายในเดือนนี้"},
+  {k:"info",l:"ข้อมูลหรือวัตถุดิบที่ต้องใช้",type:"area",p:"วางข้อมูล ตัวเลข โน้ต หรือข้อความต้นทางตรงนี้"}
+ ],
+ fmt:["หัวข้อและหัวข้อย่อยเป็นข้อ ๆ","ข้อความพร้อมใช้ คัดลอกไปวางได้เลย","ตารางตามด้วยคำอธิบาย","เป็นขั้นตอนที่ทำตามได้ทีละข้อ","หลายตัวเลือกให้เปรียบเทียบ"],
+ tone:["เป็นทางการ","กึ่งทางการ","เป็นกันเอง","กระชับ ตรงประเด็น"],
+ check:"ผลลัพธ์ตอบสิ่งที่ระบุไว้ว่าเป็นความสำเร็จหรือไม่",
+ limitsP:"ไม่เกิน 1 หน้ากระดาษ",
+ tasks:[
+  {id:"write",t:"เขียนให้",d:"ร่างงานเขียนชิ้นใหม่",role:"ผู้เชี่ยวชาญตามบทบาทที่ระบุไว้ในบริบท",
+   ex:[{k:"what",l:"ให้เขียนอะไร",type:"area",p:"เขียนอะไร ความยาวเท่าไร ต้องมีองค์ประกอบอะไรบ้าง"}],
+   m:()=>`เขียนงานตามที่ระบุต่อไปนี้
+"${OR(X("what"),"สิ่งที่ต้องการให้เขียน")}"
+- ยึดผู้รับผลงานและเป้าหมายที่ระบุไว้ในบริบทเป็นหลักในการเลือกภาษาและความยาว
+- ใส่เฉพาะสิ่งที่จำเป็นต่อเป้าหมาย ตัดส่วนที่ไม่ช่วยให้ผู้รับตัดสินใจหรือเข้าใจ`},
+  {id:"analyze",t:"วิเคราะห์ให้",d:"มองหาแบบแผนหรือข้อสรุปจากข้อมูล",role:"นักวิเคราะห์ตามบทบาทที่ระบุไว้ในบริบท ซึ่งแยกข้อเท็จจริงออกจากการตีความเสมอ",
+   ex:[{k:"q",l:"คำถามที่อยากได้คำตอบ",type:"area",p:"อยากรู้อะไรจากข้อมูลนี้"}],
+   m:()=>`วิเคราะห์เพื่อตอบคำถามต่อไปนี้
+"${OR(X("q"),"คำถามที่อยากได้คำตอบ")}"
+- เริ่มด้วยข้อสรุปหลักก่อน แล้วจึงแสดงเหตุผลรองรับ
+- แยกให้ชัดว่าส่วนใดคือข้อเท็จจริงจากข้อมูลที่ให้มา และส่วนใดคือการตีความ
+- ระบุข้อมูลที่ยังขาดซึ่งอาจเปลี่ยนข้อสรุปได้`},
+  {id:"idea",t:"ระดมไอเดีย",d:"หาทางเลือกให้มากก่อนคัดเลือก",role:"ผู้นำกระบวนการคิดสร้างสรรค์ที่ผลักให้ออกนอกคำตอบแรกที่ทุกคนนึกถึง",
+   ex:[{k:"n",l:"จำนวนไอเดีย",type:"select",o:["10 ไอเดีย","20 ไอเดีย"]}],
+   m:()=>`ระดมไอเดีย ${X("n")} สำหรับสถานการณ์ที่ระบุไว้
+- จัดกลุ่มตามแนวคิด และให้มีทั้งไอเดียที่ทำได้ทันที ไอเดียที่ต้องลงทุน และไอเดียที่กล้าเสี่ยง
+- แต่ละไอเดียบอกสั้น ๆ ว่าทำอย่างไรและเหมาะกับสถานการณ์ใด
+- ปิดท้ายด้วยการเลือกมา 3 ไอเดียที่คุ้มค่าที่สุดในเงื่อนไขที่ให้ พร้อมเหตุผล`},
+  {id:"teach",t:"อธิบายหรือสอน",d:"ทำเรื่องยากให้เข้าใจ",role:"ครูที่อธิบายเรื่องยากด้วยตัวอย่างใกล้ตัวและตรวจสอบความเข้าใจไปด้วย",
+   ex:[{k:"topic",l:"เรื่องที่อยากเข้าใจ",p:"ดอกเบี้ยทบต้นทำงานอย่างไร"},{k:"lv",l:"อธิบายระดับไหน",type:"select",o:["เหมือนอธิบายให้เด็ก 10 ขวบ","สำหรับผู้ใหญ่ที่ไม่มีพื้นฐาน","สำหรับคนที่รู้พื้นฐานแล้ว"]}],
+   m:()=>`อธิบายเรื่อง ${OR(X("topic"),"เรื่องที่อยากเข้าใจ")} ในระดับ${X("lv")}
+- เริ่มจากภาพรวมสั้น ๆ ว่าเรื่องนี้คืออะไรและสำคัญอย่างไรกับผู้ฟัง
+- ใช้ตัวอย่างหรือการเปรียบเทียบที่ใกล้ตัวคนไทย และระบุจุดที่การเปรียบเทียบนั้นใช้ไม่ได้
+- ชี้ความเข้าใจผิดที่พบบ่อยเกี่ยวกับเรื่องนี้
+- ปิดท้ายด้วยคำถาม 3 ข้อให้ผู้อ่านลองตอบเพื่อตรวจสอบว่าเข้าใจจริง`},
+  {id:"improve",t:"ตรวจและปรับปรุงงานเดิม",d:"มีงานอยู่แล้ว อยากให้ดีขึ้น",role:"บรรณาธิการที่ติอย่างมีเหตุผลและเสนอทางแก้ทุกครั้งที่ติ",
+   ex:[{k:"draft",l:"งานที่มีอยู่",type:"area",p:"วางงานเดิมของคุณตรงนี้"},{k:"aim",l:"อยากให้ดีขึ้นด้านไหน",p:"กระชับขึ้นและน่าเชื่อถือขึ้น"}],
+   m:()=>`ตรวจและปรับปรุงงานต่อไปนี้ โดยเน้นให้ ${OR(X("aim"),"สิ่งที่อยากให้ดีขึ้น")}
+"${OR(X("draft"),"งานที่มีอยู่")}"
+- ชี้จุดที่ควรแก้ พร้อมเหตุผลและตัวอย่างการแก้ที่เขียนให้ดูจริง
+- บอกด้วยว่าส่วนใดดีอยู่แล้วและควรคงไว้
+- ท้ายสุดให้ฉบับที่ปรับปรุงแล้วแบบเต็ม โดยรักษาน้ำเสียงเดิมของผู้เขียนไว้`},
+  {id:"plan",t:"วางแผนหรือจัดลำดับงาน",d:"เปลี่ยนความตั้งใจเป็นขั้นตอน",role:"ผู้จัดการโครงการที่เก่งการแตกงานใหญ่ให้เป็นขั้นตอนที่เริ่มได้พรุ่งนี้",
+   ex:[{k:"span",l:"กรอบเวลา",p:"6 สัปดาห์"}],
+   m:()=>`วางแผนภายในกรอบเวลา ${OR(X("span"),"กรอบเวลา")}
+- แตกเป้าหมายเป็นขั้นตอนย่อยที่ลงมือทำได้จริง เรียงตามลำดับที่ควรทำ
+- ระบุสิ่งที่ต้องเสร็จก่อนจึงจะทำขั้นถัดไปได้ และจุดที่มักติดขัด
+- ระบุว่าอะไรคือสิ่งที่ต้องทำในสัปดาห์แรกแบบเจาะจง
+- เสนอวิธีตรวจสอบความคืบหน้าที่ใช้เวลาไม่เกินสัปดาห์ละสิบนาที`}
+ ],
+ demo:{role:"นักโภชนาการที่ทำงานกับผู้สูงอายุในชุมชนมา 10 ปี",
+  situation:"ชุมชนมีผู้สูงอายุ 80 คน ครึ่งหนึ่งมีภาวะน้ำหนักเกิน อยากเริ่มโครงการอาหารกลางวันร่วมกันสัปดาห์ละครั้ง แต่ยังไม่มีงบและยังไม่ได้เสนอคณะกรรมการ",
+  audience:"คณะกรรมการชุมชน ส่วนใหญ่อายุ 50 ขึ้นไป ไม่คุ้นกับศัพท์วิชาการ",
+  goal:"คณะกรรมการเห็นชอบให้เริ่มโครงการนำร่องภายในเดือนนี้",
+  info:"งบที่พอหาได้ราว 8,000 บาทต่อเดือน มีอาสาสมัคร 5 คน ใช้ศาลาประชาคมได้ฟรี",
+  limits:"ไม่เกิน 1 หน้ากระดาษ"}
+}
+
+};
+
+/* =============== สถานะและตัวช่วย =============== */
+let dom = "edu";
+const V = id => ($("#"+id)?.value||"").trim();
+const C = id => !!$("#"+id)?.checked;
+const G = g => [...document.querySelectorAll(`input[data-g="${g}"]:checked`)].map(e=>e.value);
+const X = k => V("x_"+k);
+const OR = (v,t) => v || `[[ระบุ${t}]]`;
+const F = k => V("f_"+k);
+const task = () => document.querySelector('input[name=task]:checked')?.value;
+const curTask = () => D[dom].tasks.find(t=>t.id===task());
+
+/* =============== render =============== */
+$("#dombar").innerHTML += Object.entries(D).map(([k,d])=>
+  `<label class="dom"><input type="radio" name="dom" value="${k}"${k===dom?" checked":""}><span>${d.name}</span></label>`).join("");
+
+function fieldHTML(f,pre){
+  const id=pre+f.k, lab=`<label for="${id}">${f.l}${f.hint?` <span class="opt">(${f.hint})</span>`:""}</label>`;
+  if(f.type==="area") return `<div class="field">${lab}<textarea id="${id}" placeholder="${f.p||""}"></textarea></div>`;
+  if(f.type==="select") return `<div class="field">${lab}<select id="${id}">`+f.o.map(o=>`<option>${o}</option>`).join("")+`</select></div>`;
+  if(f.type==="check") return `<label class="check"><input type="checkbox" id="${id}"${f.def?" checked":""}><span>${f.l}</span></label>`;
+  if(f.type==="chips") return `<div class="field"><span class="chips-label">${f.l}</span><div class="chips">`+
+    f.o.map((o,i)=>`<label class="chip"><input type="checkbox" data-g="${id}" value="${o}"${(f.def||[]).includes(i)?" checked":""}><span>${o}</span></label>`).join("")+`</div></div>`;
+  return `<div class="field">${lab}<input type="text" id="${id}" placeholder="${f.p||""}"></div>`;
+}
+
+function renderDomain(){
+  const d=D[dom];
+  $("#s1title").textContent=d.s1;
+  $("#s1note").textContent=d.note;
+
+  let html="",buf=[];
+  d.ctx.forEach(f=>{
+    if(f.half){ buf.push(f); if(buf.length===2){ html+=`<div class="row">${buf.map(b=>fieldHTML(b,"f_")).join("")}</div>`; buf=[]; } }
+    else { if(buf.length){ html+=`<div class="row">${fieldHTML(buf[0],"f_")}</div>`; buf=[]; } html+=fieldHTML(f,"f_"); }
+  });
+  if(buf.length) html+=fieldHTML(buf[0],"f_");
+  $("#ctxFields").innerHTML=html;
+
+  $("#chipsBlock").innerHTML = d.chips? fieldHTML({...d.chips,type:"chips"},"f_") : "";
+
+  $("#tasks").innerHTML = d.tasks.map((t,i)=>
+    `<label class="task"><input type="radio" name="task" value="${t.id}"${i===0?" checked":""}>
+     <span><strong>${t.t}</strong><em>${t.d}</em></span></label>`).join("");
+
+  $("#format").innerHTML = d.fmt.map(o=>`<option>${o}</option>`).join("");
+  $("#tone").innerHTML   = d.tone.map(o=>`<option>${o}</option>`).join("");
+  $("#limits").placeholder = d.limitsP;
+  $("#limits").value="";
+  renderExtras();
+}
+
+function renderExtras(){
+  const ex = curTask()?.ex||[];
+  $("#extras").innerHTML = ex.map(f=>fieldHTML(f,"x_")).join("");
+  build();
+}
+
+/* =============== ประกอบพร้อมท์ =============== */
+function build(){
+  const d=D[dom], t=curTask();
+  if(!t) return;
+
+  const ctxLines = d.ctx.map(f=>{
+    const v=F(f.k);
+    if(!v && !f.req) return null;
+    const val = v || `[[ระบุ${f.l}]]`;
+    return val.includes("\n") ? `- ${f.l}:\n  ${val.split("\n").join("\n  ")}` : `- ${f.l}: ${val}`;
+  }).filter(Boolean);
+  if(d.chips){ const c=G("f_"+d.chips.k); if(c.length) ctxLines.push(`- ${d.chips.l}: ${c.join(", ")}`); }
+
+  const rules=[
+    `- ใช้น้ำเสียงแบบ${V("tone")}`,
+    V("limits") && `- ข้อจำกัดที่ต้องเคารพ: ${V("limits")}`,
+    C("noInvent") && "- ห้ามแต่งข้อมูล ตัวเลข หรือแหล่งอ้างอิงขึ้นเอง หากไม่แน่ใจให้เขียนกำกับว่าเป็นข้อเสนอที่ต้องตรวจสอบ",
+    C("alt") && "- เสนอทางเลือกสำรองอีก 1 แบบที่ใช้แนวทางต่างออกไป พร้อมบอกว่าเหมาะกับสถานการณ์ใด",
+    C("why") && "- ปิดท้ายด้วยคำอธิบายสั้น ๆ ไม่เกิน 5 บรรทัด ว่าตัดสินใจเลือกแนวทางนี้เพราะอะไร",
+    "- ไม่ต้องเกริ่นนำหรือสรุปทิ้งท้าย ให้ขึ้นต้นด้วยเนื้องานทันที"
+  ].filter(Boolean).join("\n");
+
+  const checks=[
+    "- ผลลัพธ์ครบทุกองค์ประกอบที่ระบุไว้ในภารกิจหรือไม่",
+    "- ผลลัพธ์ตอบเป้าหมายและเหมาะกับผู้รับที่ระบุไว้ในบริบทหรือไม่",
+    `- ${d.check}`,
+    V("limits") && "- ผลลัพธ์อยู่ในข้อจำกัดที่กำหนดไว้ทุกข้อหรือไม่",
+    C("askFirst") && "- หากข้อมูลข้างต้นไม่พอต่อการทำงานให้ครบถ้วน ให้ถามกลับไม่เกิน 3 คำถามก่อนลงมือ แทนการเดา"
+  ].filter(Boolean).join("\n");
+
+  const text=
+`# บทบาท
+คุณคือ${t.role}
+
+# บริบท
+${ctxLines.join("\n")}
+
+# ภารกิจ
+${t.m()}
+
+# รูปแบบผลลัพธ์
+${V("format")}
+ตอบเป็นภาษาไทยทั้งหมด
+
+# ข้อกำหนดและข้อจำกัด
+${rules}
+
+# ตรวจสอบก่อนตอบ
+ก่อนส่งคำตอบ ให้ทวนงานของตนเองตามรายการนี้ และแก้ให้เรียบร้อย
+${checks}`;
+
+  window.__prompt=text;
+  $("#out").innerHTML=text
+    .replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))
+    .replace(/^(# .+)$/gm,'<span class="h">$1</span>')
+    .replace(/\[\[(.+?)\]\]/g,'<span class="todo">[[$1]]</span>');
+
+  $("#count").textContent = text.trim().split(/\s+/).length+" คำ";
+  const req=d.ctx.filter(f=>f.req);
+  $("#bar").style.width = Math.round(req.filter(f=>F(f.k)).length/req.length*100)+"%";
+  const gaps=(text.match(/\[\[/g)||[]).length;
+  $("#foot").innerHTML = gaps
+    ? `เหลือช่องว่าง <b>${gaps} จุด</b> ที่ขึ้นด้วยวงเล็บสองชั้น เติมในแบบฟอร์มก่อนนำไปใช้`
+    : `ข้อมูลครบแล้ว · ${d.name} · สั่งงาน <b>${t.t}</b> — คัดลอกไปวางในแชท AI ได้เลย`;
+
+  const pc=$("#pc"), bb=$("#bubble");
+  if(pc&&bb){
+    pc.className = gaps? "idle" : "happy";
+    bb.innerHTML = gaps>4 ? `เล่าบริบทให้ผมฟังอีกหน่อยครับ ยังเหลือ <b>${gaps} จุด</b>`
+      : gaps>0 ? `ใกล้แล้วครับ เหลืออีกแค่ <b>${gaps} จุด</b>`
+      : `เยี่ยมครับ พร้อมท์<b>พร้อมใช้</b>แล้ว กดคัดลอกได้เลย`;
+  }
+}
+
+/* =============== events =============== */
+document.querySelectorAll('input[name=dom]').forEach(r=>r.addEventListener("change",e=>{
+  dom=e.target.value; renderDomain(); toast("เปลี่ยนเป็นพื้นที่งาน "+D[dom].name+" แล้ว");
+}));
+$("#form").addEventListener("input",build);
+$("#form").addEventListener("change",e=>{ e.target.name==="task"? renderExtras() : build(); });
+
+function show(v){
+  const b=v==="build";
+  $("#view-build").hidden=!b; $("#view-guide").hidden=b;
+  $("#tab-build").setAttribute("aria-selected",b);
+  $("#tab-guide").setAttribute("aria-selected",!b);
+  window.scrollTo({top:0});
+}
+$("#tab-build").onclick=()=>show("build");
+$("#tab-guide").onclick=()=>show("guide");
+document.querySelectorAll("[data-goguide]").forEach(b=>b.onclick=()=>show("guide"));
+document.querySelectorAll("[data-gobuild]").forEach(b=>b.onclick=()=>show("build"));
+
+$("#copy").addEventListener("click",async()=>{
+  const t=window.__prompt;
+  try{ await navigator.clipboard.writeText(t); toast("คัดลอกพร้อมท์แล้ว"); }
+  catch{
+    const ta=document.createElement("textarea");
+    ta.value=t; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); toast("คัดลอกพร้อมท์แล้ว"); }
+    catch{ toast("คัดลอกไม่สำเร็จ ลากเลือกข้อความบนกระดานแล้วกด Ctrl+C"); }
+    ta.remove();
+  }
+});
+$("#download").addEventListener("click",()=>{
+  const blob=new Blob([window.__prompt],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download="prompt-"+D[dom].name+".txt"; a.click();
+  URL.revokeObjectURL(a.href); toast("บันทึกไฟล์แล้ว");
+});
+$("#reset").addEventListener("click",()=>{ renderDomain(); toast("ล้างข้อมูลแล้ว"); });
+$("#demo").addEventListener("click",()=>{
+  const dm=D[dom].demo||{};
+  Object.entries(dm).forEach(([k,v])=>{
+    const el=$("#f_"+k)||(k==="limits"?$("#limits"):null);
+    if(el) el.value=v;
+  });
+  build(); toast("กรอกตัวอย่างให้แล้ว ลองเปลี่ยนชนิดงานดู");
+});
+
+let tid;
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(tid); tid=setTimeout(()=>t.classList.remove("on"),2200); }
+
+renderDomain();
+</script>
+</body>
+</html>

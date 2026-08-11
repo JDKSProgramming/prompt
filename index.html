@@ -43,7 +43,7 @@ a{color:var(--navy)}
 .masthead::before{content:"";position:absolute;inset:0;opacity:.16;pointer-events:none;
   background-image:radial-gradient(#fff 1.3px,transparent 1.3px);background-size:16px 16px}
 .mast-top{display:flex;align-items:center;gap:24px;padding:24px 0 16px;flex-wrap:wrap;position:relative}
-.eyebrow{font-family:"Press Start 2P",monospace;font-size:9px;letter-spacing:.12em;color:var(--acc-l);margin-bottom:11px}
+.eyebrow{font-family:"Chakra Petch",sans-serif;font-weight:600;font-size:12px;letter-spacing:.18em;color:var(--acc-l);margin-bottom:10px}
 .masthead h1{font-size:clamp(25px,4.2vw,35px);color:#fff;line-height:1.22;text-shadow:2px 2px 0 rgba(0,0,0,.25)}
 .masthead h1 em{font-style:normal;color:var(--acc-l)}
 .lede{margin:10px 0 0;max-width:52ch;color:#D5DEEC;font-size:14.5px}
@@ -268,6 +268,31 @@ details.faq .a p{margin:0 0 8px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 @media print{.masthead,nav.tabs,.toc,#view-build,.doc-foot,.brandbar{display:none!important}
   body{background:#fff;font-size:12pt}.doc{max-width:none}.doc section{box-shadow:none;border-width:1px}}
+
+/* ===== ปรับส่วนหัวให้กระชับบนมือถือ ===== */
+@media(max-width:820px){
+  .mast-top{padding:16px 0 12px;gap:12px;position:relative;align-items:flex-start}
+  .mast-top>div:first-child{padding-right:66px}
+  .masthead h1{font-size:26px}
+  .lede{font-size:13.5px;margin-top:6px;max-width:none}
+  .eyebrow{font-size:10.5px;margin-bottom:7px}
+  .buddy{position:absolute;right:0;top:2px;margin:0}
+  #pc{width:54px;height:54px}
+  .logobar{margin-top:10px}
+  .logobar i{width:8px;height:8px}
+  .logobar b{height:8px;max-width:130px}
+  .dombar{flex-wrap:nowrap;overflow-x:auto;padding-bottom:12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .dombar::-webkit-scrollbar{display:none}
+  .dombar .lbl{display:none}
+  .dom span{white-space:nowrap;font-size:12.5px;padding:5px 12px}
+  nav.tabs button{font-size:13px;padding:8px 15px 9px}
+  .grid{padding-top:20px}
+}
+@media(max-width:400px){
+  .masthead h1{font-size:23px}
+  #pc{width:46px;height:46px}
+  .mast-top>div:first-child{padding-right:56px}
+}
 </style>
 </head>
 <body>

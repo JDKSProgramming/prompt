@@ -293,6 +293,8 @@ details.faq .a p{margin:0 0 8px}
   #pc{width:46px;height:46px}
   .mast-top>div:first-child{padding-right:56px}
 }
+input.other{margin-top:7px;border-style:dashed;border-color:var(--acc);background:var(--acc-p)}
+input.other::placeholder{color:#B08148}
 </style>
 </head>
 <body>
@@ -354,11 +356,13 @@ details.faq .a p{margin:0 0 8px}
       <fieldset>
         <legend><div class="leg"><span class="n">๓</span><h2>เงื่อนไขของผลลัพธ์</h2><span class="note">กันงานที่ต้องแก้ซ้ำ</span></div></legend>
         <div class="row">
-          <div class="field"><label for="format">รูปแบบที่อยากได้</label><select id="format"></select></div>
-          <div class="field"><label for="tone">น้ำเสียงและระดับภาษา</label><select id="tone"></select></div>
+          <div class="field"><label for="format">รูปแบบที่อยากได้</label><select id="format"></select><input type="text" class="other" id="format__o" placeholder="พิมพ์รูปแบบที่ต้องการเอง" hidden></div>
+          <div class="field"><label for="tone">น้ำเสียงและระดับภาษา</label><select id="tone"></select><input type="text" class="other" id="tone__o" placeholder="พิมพ์น้ำเสียงที่ต้องการเอง" hidden></div>
         </div>
         <div class="field"><label for="limits">ข้อจำกัดที่ต้องเคารพ <span class="opt">(เวลา งบ เครื่องมือ ข้อห้าม)</span></label>
           <input type="text" id="limits" placeholder="ส่งภายในพรุ่งนี้เช้า ห้ามเกิน 1 หน้ากระดาษ"></div>
+        <div class="field"><label for="more">อื่น ๆ ที่อยากสั่งเพิ่ม <span class="opt">(สิ่งที่ช่องด้านบนไม่ครอบคลุม เขียนด้วยคำของคุณเอง)</span></label>
+          <textarea id="more" placeholder="เช่น ขอตัวอย่างประกอบทุกหัวข้อ / ห้ามใช้ศัพท์เทคนิค / ให้เขียนแบบที่คนอ่านออกเสียงตามได้"></textarea></div>
         <label class="check"><input type="checkbox" id="askFirst" checked><span>ให้ AI ถามกลับก่อนถ้าข้อมูลไม่พอ แทนการเดาเอง</span></label>
         <label class="check"><input type="checkbox" id="noInvent" checked><span>ห้ามแต่งข้อมูล ตัวเลข หรือแหล่งอ้างอิงขึ้นเอง</span></label>
         <label class="check"><input type="checkbox" id="alt"><span>ขอทางเลือกสำรองอีก 1 แบบ ที่ใช้แนวทางต่างออกไป</span></label>
@@ -407,6 +411,7 @@ details.faq .a p{margin:0 0 8px}
     <a href="#g3">กรอกอย่างไรให้ได้ผล</a>
     <a href="#g4">กายวิภาคของพร้อมท์</a>
     <a href="#g5">สิ่งที่ทำให้ผลลัพธ์ต่างกัน</a>
+    <a href="#g5b">เขียนพร้อมท์สร้างภาพ</a>
     <a href="#g6">หลังได้คำตอบจาก AI</a>
     <a href="#g7">ข้อควรระวังและความรับผิดชอบ</a>
     <a href="#g8">คำถามที่พบบ่อย</a>
@@ -419,7 +424,7 @@ details.faq .a p{margin:0 0 8px}
       <h2>เริ่มใช้ใน 4 ขั้น</h2>
       <p class="lead">เครื่องมือนี้ไม่ได้ทำงานแทนคุณ แต่ช่วยให้คุณ<strong>สั่งงาน AI ได้แม่นขึ้น</strong> คุณภาพของผลลัพธ์ขึ้นกับคุณภาพของคำสั่งเป็นหลัก</p>
       <div class="steps">
-        <div class="step"><div class="num">๑</div><h4>เลือกพื้นที่งาน</h4><p>ชิปด้านบนสุด เปลี่ยนแล้วช่องกรอกจะเปลี่ยนตามสายงาน</p></div>
+        <div class="step"><div class="num">๑</div><h4>เลือกพื้นที่งาน</h4><p>ชิปด้านบนสุดมี 8 สาย เปลี่ยนแล้วช่องกรอกจะเปลี่ยนตามทั้งชุด</p></div>
         <div class="step"><div class="num">๒</div><h4>กรอกบริบท</h4><p>สถานการณ์จริง ผู้รับผลงาน และสิ่งที่ถือว่าสำเร็จ</p></div>
         <div class="step"><div class="num">๓</div><h4>เลือกชนิดงาน</h4><p>เลือกทีละอย่าง ช่องกรอกเพิ่มเติมจะโผล่ตามงานที่เลือก</p></div>
         <div class="step"><div class="num">๔</div><h4>คัดลอกไปใช้</h4><p>วางในแชท AI ที่ใช้อยู่ แล้วตรวจผลลัพธ์ทุกครั้ง</p></div>
@@ -462,6 +467,15 @@ details.faq .a p{margin:0 0 8px}
       <h3>สาม บอกว่าอะไรคือความสำเร็จ</h3>
       <p>เขียนสิ่งที่อยากให้เกิดขึ้นหลังผู้รับอ่านจบ เช่น อนุมัติงบภายในสัปดาห์นี้ หรือ ลูกค้ากดสั่งซื้อโดยไม่ต้องถามราคาซ้ำ ประโยคเดียวนี้ช่วยให้ AI ตัดสินใจแทนคุณได้ถูกทางในรายละเอียดอีกนับสิบจุด</p>
 
+      <h3>เมื่อไม่มีตัวเลือกที่ตรงใจ</h3>
+      <p>ช่องที่เป็นเมนูให้เลือกทุกช่องมีทางออกสองทางอยู่ท้ายรายการเสมอ ไม่ต้องฝืนเลือกอันที่ใกล้เคียงที่สุด</p>
+      <ul>
+        <li><strong>อื่น ๆ (ระบุเอง)</strong> — เลือกแล้วจะมีช่องเส้นประสีส้มโผล่ขึ้นมาให้พิมพ์เอง ใช้เมื่อคุณรู้ว่าต้องการอะไรแต่ไม่มีในรายการ เช่น รูปแบบการสอนเฉพาะของโรงเรียน หรือสไตล์ภาพที่เจาะจง</li>
+        <li><strong>ไม่ระบุ ให้ AI เลือกให้</strong> — ใช้เมื่อยังไม่รู้ว่าอยากได้แบบไหน พร้อมท์จะสั่งให้ AI เลือกสิ่งที่เหมาะกับบริบทที่สุด พร้อมบอกด้วยว่าเลือกแบบใดและเพราะอะไร จึงได้เรียนรู้จากคำตอบไปในตัว</li>
+        <li>ช่องติ๊กหลายอันก็มีปุ่ม <strong>อื่น ๆ</strong> เช่นกัน พิมพ์เพิ่มได้หลายอย่างโดยคั่นด้วยจุลภาค</li>
+      </ul>
+      <div class="callout"><strong>ช่องท้ายสุดของแบบฟอร์มสำคัญกว่าที่คิด</strong> ช่อง อื่น ๆ ที่อยากสั่งเพิ่ม ในส่วนที่ ๓ เป็นช่องเปล่าให้เขียนอะไรก็ได้ด้วยคำของคุณเอง สิ่งที่พิมพ์จะกลายเป็นข้อกำหนดในพร้อมท์ทันที ขึ้นบรรทัดใหม่จะแยกเป็นคนละข้อให้ ใช้กับเงื่อนไขเฉพาะที่ไม่มีช่องไหนรองรับ เช่น ห้ามใช้ศัพท์เทคนิค หรือ ต้องอ้างอิงระเบียบของหน่วยงานฉบับล่าสุด</div>
+
       <table class="tbl">
         <tr><th>ถ้าเว้นว่าง</th><th>สิ่งที่มักเกิดขึ้น</th></tr>
         <tr><td>ผู้รับผลงาน</td><td>ได้ภาษากลาง ๆ ที่ต้องมานั่งปรับน้ำเสียงใหม่ทั้งฉบับ</td></tr>
@@ -502,8 +516,45 @@ details.faq .a p{margin:0 0 8px}
       </div>
     </section>
 
-    <section id="g6">
+    <section id="g5b">
       <span class="kicker">บทที่ ๖</span>
+      <h2>เขียนพร้อมท์สร้างภาพ</h2>
+      <p class="lead">พื้นที่งาน <strong>สร้างภาพ</strong> ทำงานต่างจากงานเขียนโดยสิ้นเชิง เพราะปลายทางไม่ใช่ข้อความที่คนอ่าน แต่เป็นคำสั่งที่เครื่องมือสร้างภาพต้องตีความเป็นรูป</p>
+
+      <h3>ผลลัพธ์จะเป็นภาษาอังกฤษ</h3>
+      <p>เครื่องมือสร้างภาพเกือบทั้งหมดตีความภาษาอังกฤษได้แม่นกว่าภาษาไทยมาก พร้อมท์ที่ระบบสร้างให้จึงสั่งให้ AI เขียนออกมาเป็นภาษาอังกฤษ และมีตัวเลือกให้แนบคำแปลไทยกำกับไว้ใต้แต่ละอัน คุณจะได้ตรวจสอบได้ว่าตรงกับที่ต้องการก่อนนำไปใช้ แม้อ่านอังกฤษไม่คล่องก็ทำงานได้</p>
+
+      <h3>ลำดับของคำมีผลต่อภาพที่ได้</h3>
+      <p>เครื่องมือสร้างภาพให้น้ำหนักกับคำที่มาก่อนมากกว่าคำที่มาทีหลัง พร้อมท์ที่ระบบเขียนให้จึงเรียงตามลำดับนี้เสมอ</p>
+      <ol>
+        <li>ประธานของภาพ คือสิ่งที่ต้องเห็นชัดที่สุด</li>
+        <li>ฉากและสิ่งแวดล้อมรอบตัว</li>
+        <li>มุมกล้องและระยะภาพ</li>
+        <li>ลักษณะแสง</li>
+        <li>สไตล์ภาพและโทนสี</li>
+        <li>สัดส่วนภาพ</li>
+      </ol>
+
+      <div class="pair">
+        <div class="card bad"><span class="tag">คำที่เครื่องมือตีความไม่ได้</span><q>ภาพสวย ๆ ดูดี บรรยากาศอบอุ่นน่าประทับใจ</q><p>คำนามธรรมไม่ได้บอกว่าต้องเห็นอะไรในภาพ ผลที่ได้จึงสุ่มไปเรื่อยทุกครั้งที่กด</p></div>
+        <div class="card good"><span class="tag">คำที่ตีความเป็นภาพได้</span><q>แสงแดดบ่ายส่องผ่านหน้าต่างด้านซ้าย เงายาวทอดบนโต๊ะไม้ มุมกล้องระดับสายตา</q><p>ทุกคำบอกสิ่งที่มองเห็นได้ ผลลัพธ์จึงคาดเดาได้และแก้ต่อได้ตรงจุด</p></div>
+      </div>
+
+      <h3>สามเรื่องที่ระบบใส่ให้อัตโนมัติ</h3>
+      <ul>
+        <li><strong>negative prompt</strong> — รายการสิ่งที่ไม่ต้องการให้ปรากฏ แยกไว้ต่างหาก เพราะเครื่องมือส่วนใหญ่มีช่องนี้แยกจากพร้อมท์หลัก</li>
+        <li><strong>ไม่ให้สร้างตัวหนังสือในภาพ</strong> — AI สะกดผิดเกือบทุกครั้ง โดยเฉพาะภาษาไทย ให้สร้างภาพเปล่าแล้วพิมพ์ข้อความทับเองทีหลังจะเรียบร้อยกว่ามาก</li>
+        <li><strong>หลายเวอร์ชันเสมอ</strong> — พร้อมท์เดียวมักไม่ได้ภาพที่ใช่ในครั้งแรก ระบบจึงให้มา 3 ถึง 5 เวอร์ชันที่ตีความต่างมุมกัน พร้อมบอกว่าแต่ละอันต่างกันตรงไหน</li>
+      </ul>
+
+      <h3>ถ้าภาพที่ได้ยังไม่ตรง</h3>
+      <p>อย่าเพิ่งเขียนใหม่ทั้งหมด ให้เลือกชนิดงาน <strong>แก้พร้อมท์ที่ภาพไม่ตรง</strong> วางพร้อมท์เดิมลงไปพร้อมบอกว่าภาพผิดจากที่ต้องการอย่างไร ระบบจะสั่งให้ AI ชี้ว่าคำไหนในพร้อมท์เดิมที่ทำให้พลาด แล้วเสนอทางแก้สามแบบที่ใช้วิธีต่างกัน ซึ่งเป็นวิธีเรียนรู้ที่เร็วกว่าลองสุ่มไปเรื่อย</p>
+
+      <div class="callout"><strong>ข้อควรระวังเฉพาะงานภาพ</strong> อย่าสร้างภาพเลียนแบบบุคคลจริงที่ระบุตัวตนได้ หรือตัวละครที่มีลิขสิทธิ์ และถ้านำภาพไปใช้ในงานโฆษณา ต้องไม่ทำให้ผู้บริโภคเข้าใจผิดเรื่องหน้าตาหรือปริมาณของสินค้าจริง</div>
+    </section>
+
+    <section id="g6">
+      <span class="kicker">บทที่ ๗</span>
       <h2>หลังได้คำตอบจาก AI</h2>
       <p>ผลลัพธ์ที่ได้คือ<strong>ร่าง</strong> ไม่ใช่งานที่ส่งได้ทันที ตรวจตามลำดับนี้ก่อนทุกครั้ง</p>
       <ol>
@@ -516,7 +567,7 @@ details.faq .a p{margin:0 0 8px}
     </section>
 
     <section id="g7">
-      <span class="kicker">บทที่ ๗</span>
+      <span class="kicker">บทที่ ๘</span>
       <h2>ข้อควรระวังและความรับผิดชอบ</h2>
       <ul>
         <li><strong>อย่าใส่ข้อมูลส่วนบุคคลหรือความลับ</strong> — ชื่อจริงพร้อมข้อมูลอ่อนไหว เลขบัตรประชาชน ข้อมูลสุขภาพ รหัสผ่าน คีย์ระบบ หรือข้อมูลลูกค้า ให้เขียนแบบไม่ระบุตัวตนแทน เช่น ลูกค้ารายหนึ่งในกลุ่มองค์กร</li>
@@ -528,7 +579,7 @@ details.faq .a p{margin:0 0 8px}
     </section>
 
     <section id="g8">
-      <span class="kicker">บทที่ ๘</span>
+      <span class="kicker">บทที่ ๙</span>
       <h2>คำถามที่พบบ่อย</h2>
       <details class="faq"><summary>ใช้กับ AI ตัวไหนได้บ้าง</summary><div class="a"><p>ใช้ได้กับผู้ช่วย AI แบบแชททั่วไป พร้อมท์ที่สร้างเป็นข้อความล้วน ไม่ผูกกับระบบใดระบบหนึ่ง คัดลอกไปวางในช่องแชทได้เลย</p></div></details>
       <details class="faq"><summary>ข้อมูลที่กรอกถูกส่งออกไปไหนหรือไม่</summary><div class="a"><p>ไม่ ทุกอย่างประมวลผลในหน้าเว็บนี้เท่านั้นและไม่มีการบันทึกไว้ เมื่อปิดหรือรีเฟรชหน้า ข้อมูลจะหายทั้งหมด หากต้องการเก็บให้กดบันทึกไฟล์</p></div></details>
@@ -536,6 +587,8 @@ details.faq .a p{margin:0 0 8px}
       <details class="faq"><summary>ทำไมต้องกรอกเยอะ ในเมื่อพิมพ์สั้น ๆ AI ก็ตอบ</summary><div class="a"><p>ตอบได้ แต่จะตอบแบบกลาง ๆ ที่ใช้กับใครก็ได้ ซึ่งแปลว่าไม่ตรงกับสถานการณ์ของคุณเป็นพิเศษ เวลาที่ใช้กรอกราวสามนาที มักประหยัดเวลาแก้งานได้มากกว่านั้นหลายเท่า</p></div></details>
       <details class="faq"><summary>ต้องการงานหลายชิ้นในเรื่องเดียวกัน</summary><div class="a"><p>ทำทีละชิ้นในแชทเดิม เริ่มจากชิ้นหลักก่อน แล้วเปลี่ยนชนิดงานและคัดลอกพร้อมท์ใหม่ไปถามต่อ AI จะเห็นสิ่งที่คุยกันไว้แล้วและทำให้สอดคล้องกัน</p></div></details>
       <details class="faq"><summary>ผลลัพธ์ยาวหรือสั้นเกินไป</summary><div class="a"><p>พิมพ์ต่อในแชทได้เลย เช่น ย่อเหลือครึ่งเดียวโดยคงสามประเด็นหลักไว้ การปรับทีละจุดได้ผลดีกว่าสั่งให้เขียนใหม่ทั้งหมด</p></div></details>
+      <details class="faq"><summary>ทำไมพร้อมท์สร้างภาพถึงออกมาเป็นภาษาอังกฤษ</summary><div class="a"><p>เพราะเครื่องมือสร้างภาพตีความภาษาอังกฤษได้แม่นกว่ามาก ถ้าอยากตรวจสอบว่าตรงกับที่ต้องการหรือไม่ ให้ติ๊กตัวเลือกแนบคำแปลไทยไว้ด้วย จะได้อ่านเทียบทีละบรรทัด</p></div></details>
+      <details class="faq"><summary>ไม่มีตัวเลือกที่ตรงกับงานของฉันในเมนู</summary><div class="a"><p>ทุกเมนูมี อื่น ๆ (ระบุเอง) ให้พิมพ์เองอยู่ท้ายรายการ และถ้าเป็นเงื่อนไขที่ไม่มีช่องไหนรองรับเลย ให้เขียนลงช่อง อื่น ๆ ที่อยากสั่งเพิ่ม ในส่วนที่ ๓ ด้วยคำของคุณเอง</p></div></details>
       <div class="doc-foot">
         <p>พร้อมลองแล้วใช่ไหม</p>
         <button type="button" class="btn-solid" data-gobuild>กลับไปเขียนพร้อมท์</button>
@@ -1171,9 +1224,25 @@ free:{name:"เขียนเอง",note:"งานที่ไม่เข้
 
 /* =============== สถานะและตัวช่วย =============== */
 let dom = "edu";
-const V = id => ($("#"+id)?.value||"").trim();
+const OTHER="อื่น ๆ (ระบุเอง)";
+const NOSPEC="ไม่ระบุ ให้ AI เลือกให้";
+const FREE="ให้เลือกให้เหมาะสมที่สุดกับบริบท พร้อมระบุว่าเลือกแบบใดและเพราะอะไร";
+const V = id => {
+  const el=$("#"+id); if(!el) return "";
+  let v=(el.value||"").trim();
+  if(v===OTHER) v=($("#"+id+"__o")?.value||"").trim();
+  else if(v===NOSPEC) v=FREE;
+  return v;
+};
 const C = id => !!$("#"+id)?.checked;
-const G = g => [...document.querySelectorAll(`input[data-g="${g}"]:checked`)].map(e=>e.value);
+const G = g => {
+  const out=[];
+  document.querySelectorAll(`input[data-g="${g}"]:checked`).forEach(e=>{
+    if(e.value===OTHER){ const t=($("#"+g+"__o")?.value||"").trim(); if(t) out.push(t); }
+    else out.push(e.value);
+  });
+  return out;
+};
 const X = k => V("x_"+k);
 const OR = (v,t) => v || `[[ระบุ${t}]]`;
 const F = k => V("f_"+k);
@@ -1187,10 +1256,14 @@ $("#dombar").innerHTML += Object.entries(D).map(([k,d])=>
 function fieldHTML(f,pre){
   const id=pre+f.k, lab=`<label for="${id}">${f.l}${f.hint?` <span class="opt">(${f.hint})</span>`:""}</label>`;
   if(f.type==="area") return `<div class="field">${lab}<textarea id="${id}" placeholder="${f.p||""}"></textarea></div>`;
-  if(f.type==="select") return `<div class="field">${lab}<select id="${id}">`+f.o.map(o=>`<option>${o}</option>`).join("")+`</select></div>`;
+  if(f.type==="select") return `<div class="field">${lab}<select id="${id}">`+f.o.map(o=>`<option>${o}</option>`).join("")+
+    `<option>${OTHER}</option><option>${NOSPEC}</option></select>`+
+    `<input type="text" class="other" id="${id}__o" placeholder="พิมพ์สิ่งที่ต้องการเอง" hidden></div>`;
   if(f.type==="check") return `<label class="check"><input type="checkbox" id="${id}"${f.def?" checked":""}><span>${f.l}</span></label>`;
   if(f.type==="chips") return `<div class="field"><span class="chips-label">${f.l}</span><div class="chips">`+
-    f.o.map((o,i)=>`<label class="chip"><input type="checkbox" data-g="${id}" value="${o}"${(f.def||[]).includes(i)?" checked":""}><span>${o}</span></label>`).join("")+`</div></div>`;
+    f.o.map((o,i)=>`<label class="chip"><input type="checkbox" data-g="${id}" value="${o}"${(f.def||[]).includes(i)?" checked":""}><span>${o}</span></label>`).join("")+
+    `<label class="chip"><input type="checkbox" data-g="${id}" value="${OTHER}"><span>อื่น ๆ</span></label>`+
+    `</div><input type="text" class="other" id="${id}__o" placeholder="ระบุเพิ่มเอง คั่นหลายอย่างด้วยจุลภาค" hidden></div>`;
   return `<div class="field">${lab}<input type="text" id="${id}" placeholder="${f.p||""}"></div>`;
 }
 
@@ -1213,8 +1286,11 @@ function renderDomain(){
     `<label class="task"><input type="radio" name="task" value="${t.id}"${i===0?" checked":""}>
      <span><strong>${t.t}</strong><em>${t.d}</em></span></label>`).join("");
 
-  $("#format").innerHTML = d.fmt.map(o=>`<option>${o}</option>`).join("");
-  $("#tone").innerHTML   = d.tone.map(o=>`<option>${o}</option>`).join("");
+  const tail=`<option>${OTHER}</option>`;
+  $("#format").innerHTML = d.fmt.map(o=>`<option>${o}</option>`).join("")+tail;
+  $("#tone").innerHTML   = d.tone.map(o=>`<option>${o}</option>`).join("")+tail;
+  $("#format__o").hidden=true; $("#format__o").value="";
+  $("#tone__o").hidden=true;   $("#tone__o").value="";
   const tl=document.querySelector('label[for="tone"]');
   if(tl) tl.textContent = d.toneL || "น้ำเสียงและระดับภาษา";
   $("#limits").placeholder = d.limitsP;
@@ -1247,6 +1323,7 @@ function build(){
     C("noInvent") && "- ห้ามแต่งข้อมูล ตัวเลข หรือแหล่งอ้างอิงขึ้นเอง หากไม่แน่ใจให้เขียนกำกับว่าเป็นข้อเสนอที่ต้องตรวจสอบ",
     C("alt") && "- เสนอทางเลือกสำรองอีก 1 แบบที่ใช้แนวทางต่างออกไป พร้อมบอกว่าเหมาะกับสถานการณ์ใด",
     C("why") && "- ปิดท้ายด้วยคำอธิบายสั้น ๆ ไม่เกิน 5 บรรทัด ว่าตัดสินใจเลือกแนวทางนี้เพราะอะไร",
+    V("more") && `- ${V("more").split("\n").filter(Boolean).join("\n- ")}`,
     "- ไม่ต้องเกริ่นนำหรือสรุปทิ้งท้าย ให้ขึ้นต้นด้วยเนื้องานทันที"
   ].filter(Boolean).join("\n");
 
@@ -1307,7 +1384,21 @@ document.querySelectorAll('input[name=dom]').forEach(r=>r.addEventListener("chan
   dom=e.target.value; renderDomain(); toast("เปลี่ยนเป็นพื้นที่งาน "+D[dom].name+" แล้ว");
 }));
 $("#form").addEventListener("input",build);
-$("#form").addEventListener("change",e=>{ e.target.name==="task"? renderExtras() : build(); });
+function syncOther(el){
+  if(el.tagName==="SELECT"){
+    const o=$("#"+el.id+"__o"); if(!o) return;
+    const on = el.value===OTHER;
+    o.hidden=!on; if(!on) o.value=""; if(on) o.focus();
+  }
+  if(el.type==="checkbox" && el.dataset.g && el.value===OTHER){
+    const o=$("#"+el.dataset.g+"__o"); if(!o) return;
+    o.hidden=!el.checked; if(!el.checked) o.value=""; if(el.checked) o.focus();
+  }
+}
+$("#form").addEventListener("change",e=>{
+  if(e.target.name==="task"){ renderExtras(); return; }
+  syncOther(e.target); build();
+});
 
 function show(v){
   const b=v==="build";

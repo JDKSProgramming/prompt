@@ -295,6 +295,21 @@ details.faq .a p{margin:0 0 8px}
 }
 input.other{margin-top:7px;border-style:dashed;border-color:var(--acc);background:var(--acc-p)}
 input.other::placeholder{color:#B08148}
+
+/* ===== ปุ่มลอยสำหรับจอเล็ก ===== */
+.fab{position:fixed;left:0;right:0;bottom:0;z-index:8;display:flex;gap:8px;padding:9px 12px;
+  background:rgba(237,241,247,.95);border-top:3px solid var(--ink);backdrop-filter:blur(6px)}
+.fab button{flex:1;font:inherit;font-family:"Chakra Petch",sans-serif;font-weight:600;font-size:14px;
+  padding:11px 8px;border-radius:10px;border:2.5px solid var(--ink);background:#fff;color:var(--ink);
+  box-shadow:3px 3px 0 var(--ink)}
+.fab button.p{background:var(--acc);color:#3A2205}
+.fab button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.fab #fabGap{font-family:"IBM Plex Mono",monospace;font-size:11px;opacity:.75}
+@media(max-width:980px){
+  .fab[hidden]{display:flex!important}
+  body{padding-bottom:64px}
+}
+@media(min-width:981px){.fab{display:none!important}}
 </style>
 </head>
 <body>
@@ -607,6 +622,11 @@ input.other::placeholder{color:#B08148}
   </div>
 </footer>
 
+<div class="fab" id="fab" hidden>
+  <button type="button" id="fabJump">ดูพร้อมท์ <span id="fabGap"></span></button>
+  <button type="button" id="fabCopy" class="p">คัดลอก</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -699,11 +719,11 @@ edu:{name:"การศึกษา",note:"ครูและนักศึก�
 - ตั้งคำถามสะท้อนคิด 3 ข้อ ที่ท้าทายให้ครูทบทวนการตัดสินใจของตนเองระหว่างสอน`+(C("x_next")?`
 - ปิดท้ายด้วยประเด็นที่พัฒนาเป็นงานวิจัยในชั้นเรียนได้ 2 ประเด็น พร้อมคำถามวิจัยและวิธีเก็บข้อมูลที่ทำได้จริง`:"")}
  ],
- demo:{subject:"วิทยาศาสตร์พื้นฐาน",level:"มัธยมศึกษาปีที่ 1",learners:"36 คน",time:"2 คาบ (100 นาที)",
-  unit:"หน่วยที่ 3 สารละลาย เรื่องความเข้มข้นของสารละลายเป็นร้อยละ",
-  indicators:"ว 2.1 ม.1/4 ระบุปริมาณตัวละลายในสารละลายในหน่วยความเข้มข้นเป็นร้อยละโดยมวลต่อมวล และมวลต่อปริมาตร",
-  context:"คำนวณสัดส่วนได้ระดับพอใช้ มี 5 คนต้องการความช่วยเหลือด้านการอ่านโจทย์ ชอบลงมือทำมากกว่าฟังบรรยาย ห้องมีโปรเจกเตอร์แต่อินเทอร์เน็ตไม่เสถียร",
-  limits:"ใช้วัสดุที่หาได้ในครัวเรือน งบไม่เกิน 200 บาท ไม่ใช้สารเคมีอันตราย"}
+ demo:{subject:"ภาษาไทย",level:"ประถมศึกษาปีที่ 5",learners:"32 คน",time:"2 คาบ (100 นาที)",
+  unit:"หน่วยการเรียนรู้ที่ 4 คำราชาศัพท์ เรื่องคำราชาศัพท์หมวดร่างกายและเครื่องใช้",
+  indicators:"ท 4.1 ป.5/4 ใช้คำราชาศัพท์และคำสุภาพได้เหมาะสมกับบุคคลและโอกาส",
+  context:"นักเรียนอ่านคล่องเกือบทุกคน แต่มี 6 คนที่เขียนสะกดผิดบ่อย ยังสับสนว่าคำใดใช้กับใคร ชอบกิจกรรมแข่งขันและบทบาทสมมติมากกว่าท่องจำ ห้องมีโปรเจกเตอร์แต่อินเทอร์เน็ตไม่เสถียร",
+  limits:"ใช้สื่อที่ทำเองได้ในโรงเรียน ไม่ต้องใช้อินเทอร์เน็ตระหว่างสอน"}
 },
 
 /* ---------- สำนักงานและเอกสาร ---------- */
@@ -1366,6 +1386,7 @@ ${checks}`;
   const req=d.ctx.filter(f=>f.req);
   $("#bar").style.width = Math.round(req.filter(f=>F(f.k)).length/req.length*100)+"%";
   const gaps=(text.match(/\[\[/g)||[]).length;
+  if(window.__fabUpdate) window.__fabUpdate();
   $("#foot").innerHTML = gaps
     ? `เหลือช่องว่าง <b>${gaps} จุด</b> ที่ขึ้นด้วยวงเล็บสองชั้น เติมในแบบฟอร์มก่อนนำไปใช้`
     : `ข้อมูลครบแล้ว · ${d.name} · สั่งงาน <b>${t.t}</b> — คัดลอกไปวางในแชท AI ได้เลย`;
@@ -1444,6 +1465,21 @@ let tid;
 function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(tid); tid=setTimeout(()=>t.classList.remove("on"),2200); }
 
 renderDomain();
+
+/* ---- ปุ่มลอยบนจอเล็ก ---- */
+(function(){
+  const fab=$("#fab"); if(!fab) return;
+  $("#fabJump").onclick=()=>{
+    document.querySelector(".board").scrollIntoView({behavior:"smooth",block:"start"});
+  };
+  $("#fabCopy").onclick=()=>$("#copy").click();
+  window.__fabUpdate=()=>{
+    const g=(window.__prompt.match(/\[\[/g)||[]).length;
+    $("#fabGap").textContent = g? "(ขาด "+g+")" : "(ครบ)";
+    $("#fabCopy").style.opacity = g? .55 : 1;
+  };
+  window.__fabUpdate();
+})();
 </script>
 </body>
 </html>
